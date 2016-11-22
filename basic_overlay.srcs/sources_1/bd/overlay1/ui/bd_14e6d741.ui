@@ -1,0 +1,244 @@
+{
+   guistr: "# # String gsaved with Nlview 6.5.12  2016-01-29 bk=1.3547 VDI=39 GEI=35 GUI=JA:1.6
+#  -string -flagsOSRD
+preplace port ddr3_cas_n -pg 1 -y 1510 -defaultsOSRD
+preplace port HPD -pg 1 -y 780 -defaultsOSRD
+preplace port PCI_CLK_N -pg 1 -y 1760 -defaultsOSRD
+preplace port ddr3_we_n -pg 1 -y 1530 -defaultsOSRD
+preplace port PCI_CLK_P -pg 1 -lvl 5:-130 -defaultsOSRD -bot
+preplace port ddr3_reset_n -pg 1 -y 1550 -defaultsOSRD
+preplace port HDMI_RX_0_N -pg 1 -y 350 -defaultsOSRD
+preplace port LV_SCL -pg 1 -y 800 -defaultsOSRD
+preplace port HDMI_RX_CLK_N -pg 1 -y 520 -defaultsOSRD
+preplace port PERST_N -pg 1 -y 570 -defaultsOSRD
+preplace port HDMI_RX_0_P -pg 1 -y 330 -defaultsOSRD
+preplace port SYSCLK -pg 1 -y 1010 -defaultsOSRD
+preplace port ddr3_ras_n -pg 1 -y 1490 -defaultsOSRD
+preplace port HDMI_RX_2_N -pg 1 -y 430 -defaultsOSRD
+preplace port HDMI_RX_CLK_P -pg 1 -y 500 -defaultsOSRD
+preplace port HDMI_RX_1_N -pg 1 -y 390 -defaultsOSRD
+preplace port PCI_RX_N -pg 1 -y 1090 -defaultsOSRD
+preplace port HDMI_RX_2_P -pg 1 -y 410 -defaultsOSRD
+preplace port HDMI_RX_1_P -pg 1 -y 370 -defaultsOSRD
+preplace port PCI_RX_P -pg 1 -y 930 -defaultsOSRD
+preplace port LV_SDA -pg 1 -y 820 -defaultsOSRD
+preplace portBus HDMI_TX_1_P -pg 1 -y 320 -defaultsOSRD
+preplace portBus HDMI_TX_CLK_P -pg 1 -y 400 -defaultsOSRD
+preplace portBus ddr3_dqs_n -pg 1 -y 1430 -defaultsOSRD
+preplace portBus HDMI_TX_2_N -pg 1 -y 380 -defaultsOSRD
+preplace portBus ddr3_odt -pg 1 -y 1670 -defaultsOSRD
+preplace portBus ddr3_ck_n -pg 1 -y 1590 -defaultsOSRD
+preplace portBus ddr3_dqs_p -pg 1 -y 1410 -defaultsOSRD
+preplace portBus HDMI_TX_2_P -pg 1 -y 360 -defaultsOSRD
+preplace portBus PCI_TX_N -pg 1 -y 1270 -defaultsOSRD
+preplace portBus ddr3_ck_p -pg 1 -y 1570 -defaultsOSRD
+preplace portBus ddr3_cs_n -pg 1 -y 1630 -defaultsOSRD
+preplace portBus HPD_OVER -pg 1 -y 1120 -defaultsOSRD
+preplace portBus BLINKENLIGHT -pg 1 -y 1220 -defaultsOSRD
+preplace portBus PCI_TX_P -pg 1 -y 1370 -defaultsOSRD
+preplace portBus ddr3_dm -pg 1 -y 1650 -defaultsOSRD
+preplace portBus HDMI_TX_0_N -pg 1 -y 300 -defaultsOSRD
+preplace portBus ddr3_ba -pg 1 -y 1470 -defaultsOSRD
+preplace portBus HDMI_TX_1_N -pg 1 -y 340 -defaultsOSRD
+preplace portBus HDMI_TX_0_P -pg 1 -y 280 -defaultsOSRD
+preplace portBus ddr3_dq -pg 1 -y 1390 -defaultsOSRD
+preplace portBus ddr3_a -pg 1 -y 1450 -defaultsOSRD
+preplace portBus ddr3_cke -pg 1 -y 1610 -defaultsOSRD
+preplace portBus HDMI_TX_CLK_N -pg 1 -y 420 -defaultsOSRD
+preplace inst v_axi4s_vid_out_0 -pg 1 -lvl 7 -y 210 -defaultsOSRD
+preplace inst util_ds_buf_1 -pg 1 -lvl 2 -y 1010 -defaultsOSRD
+preplace inst axi_vdma_0 -pg 1 -lvl 6 -y 660 -defaultsOSRD
+preplace inst xlslice_0 -pg 1 -lvl 14 -y 1220 -defaultsOSRD
+preplace inst rst_mig_7series_0_100M -pg 1 -lvl 6 -y 1580 -defaultsOSRD
+preplace inst xlslice_1 -pg 1 -lvl 12 -y 150 -defaultsOSRD
+preplace inst reg_expander_0 -pg 1 -lvl 10 -y 810 -defaultsOSRD
+preplace inst xlconstant_0 -pg 1 -lvl 5 -y 1380 -defaultsOSRD
+preplace inst mig_7series_0 -pg 1 -lvl 8 -y 1560 -defaultsOSRD
+preplace inst axi_pcie_0 -pg 1 -lvl 6 -y 1250 -defaultsOSRD
+preplace inst xlslice_2 -pg 1 -lvl 12 -y 230 -defaultsOSRD
+preplace inst xlslice_27 -pg 1 -lvl 12 -y 1070 -defaultsOSRD
+preplace inst xlconstant_1 -pg 1 -lvl 8 -y 910 -defaultsOSRD
+preplace inst util_ds_buf_10 -pg 1 -lvl 2 -y 500 -defaultsOSRD
+preplace inst dvi_decoder_v2_0 -pg 1 -lvl 4 -y 390 -defaultsOSRD
+preplace inst hdcp_snoop_0 -pg 1 -lvl 11 -y 950 -defaultsOSRD
+preplace inst xlslice_3 -pg 1 -lvl 12 -y 310 -defaultsOSRD
+preplace inst chroma_key_0 -pg 1 -lvl 13 -y 350 -defaultsOSRD
+preplace inst hdcp_engine_0 -pg 1 -lvl 12 -y 700 -defaultsOSRD
+preplace inst xlconstant_3 -pg 1 -lvl 11 -y 1330 -defaultsOSRD
+preplace inst xlconcat_0 -pg 1 -lvl 12 -y 1310 -defaultsOSRD
+preplace inst xlslice_4 -pg 1 -lvl 12 -y 990 -defaultsOSRD
+preplace inst axi_gpio_0 -pg 1 -lvl 8 -y 1040 -defaultsOSRD
+preplace inst proc_sys_reset_0 -pg 1 -lvl 3 -y 520 -defaultsOSRD
+preplace inst dvi_encoder_v2_0 -pg 1 -lvl 14 -y 350 -defaultsOSRD
+preplace inst xlslice_11 -pg 1 -lvl 11 -y 770 -defaultsOSRD
+preplace inst xlslice_5 -pg 1 -lvl 10 -y 990 -defaultsOSRD
+preplace inst proc_sys_reset_1 -pg 1 -lvl 5 -y 690 -defaultsOSRD
+preplace inst c_counter_binary_0 -pg 1 -lvl 13 -y 1220 -defaultsOSRD
+preplace inst xlslice_12 -pg 1 -lvl 9 -y 870 -defaultsOSRD
+preplace inst proc_sys_reset_2 -pg 1 -lvl 10 -y 1130 -defaultsOSRD
+preplace inst xlslice_6 -pg 1 -lvl 10 -y 1290 -defaultsOSRD
+preplace inst xlconstant_5 -pg 1 -lvl 6 -y 250 -defaultsOSRD
+preplace inst ila_0 -pg 1 -lvl 13 -y 670 -defaultsOSRD
+preplace inst util_vector_logic_3 -pg 1 -lvl 6 -y 150 -defaultsOSRD
+preplace inst xlslice_13 -pg 1 -lvl 9 -y 950 -defaultsOSRD
+preplace inst proc_sys_reset_3 -pg 1 -lvl 7 -y 1490 -defaultsOSRD
+preplace inst xlslice_7 -pg 1 -lvl 14 -y 1120 -defaultsOSRD
+preplace inst xlconstant_6 -pg 1 -lvl 6 -y 330 -defaultsOSRD
+preplace inst util_ds_buf_9 -pg 1 -lvl 1 -y 500 -defaultsOSRD
+preplace inst xlslice_8 -pg 1 -lvl 12 -y 910 -defaultsOSRD
+preplace inst c_shift_ram_0 -pg 1 -lvl 13 -y 1060 -defaultsOSRD
+preplace inst xlslice_14 -pg 1 -lvl 9 -y 1030 -defaultsOSRD
+preplace inst xlconstant_7 -pg 1 -lvl 6 -y 70 -defaultsOSRD
+preplace inst c_shift_ram_1 -pg 1 -lvl 13 -y 800 -defaultsOSRD
+preplace inst xlconstant_8 -pg 1 -lvl 5 -y 1100 -defaultsOSRD
+preplace inst rst_axi_pcie_0_125M -pg 1 -lvl 5 -y 900 -defaultsOSRD
+preplace inst clk_wiz_0 -pg 1 -lvl 3 -y 1010 -defaultsOSRD
+preplace inst c_shift_ram_2 -pg 1 -lvl 13 -y 960 -defaultsOSRD
+preplace inst axi_mem_intercon -pg 1 -lvl 7 -y 1000 -defaultsOSRD
+preplace inst util_ds_buf_0 -pg 1 -lvl 5 -y 1740 -defaultsOSRD
+preplace netloc axi_vdma_0_M_AXI_MM2S 1 6 1 2090
+preplace netloc xlslice_2_Dout 1 12 1 3960
+preplace netloc xlslice_11_Dout 1 11 1 NJ
+preplace netloc dvi_decoder_v2_0_cv 1 4 8 NJ 570 NJ 570 NJ 570 NJ 570 NJ 570 NJ 570 NJ 570 3620
+preplace netloc proc_sys_reset_2_peripheral_reset 1 10 1 3380
+preplace netloc axi_pcie_0_axi_aclk_out 1 4 6 1200 990 NJ 910 2040 1260 2460 760 NJ 760 NJ
+preplace netloc dvi_decoder_v2_0_video_gb 1 4 9 NJ 420 NJ 420 NJ 420 NJ 420 NJ 420 NJ 420 NJ 420 NJ 420 4030
+preplace netloc mig_7series_0_ddr3_we_n 1 8 7 NJ 1530 NJ 1530 NJ 1530 NJ 1530 NJ 1530 NJ 1530 NJ
+preplace netloc axi_mem_intercon_M01_AXI 1 5 3 1600 550 NJ 550 2450
+preplace netloc c_shift_ram_0_Q 1 13 1 4380
+preplace netloc axi_gpio_0_gpio2_io_o 1 8 6 NJ 1100 3000 910 NJ 1120 NJ 1120 NJ 1120 NJ
+preplace netloc mig_7series_0_ddr3_odt 1 8 7 NJ 1670 NJ 1670 NJ 1670 NJ 1670 NJ 1670 NJ 1670 NJ
+preplace netloc dvi_decoder_v2_0_red_di 1 4 9 NJ 480 NJ 480 NJ 480 NJ 480 NJ 480 NJ 480 NJ 480 NJ 480 3990
+preplace netloc dvi_decoder_v2_0_data_gb 1 4 9 NJ 540 NJ 540 NJ 410 NJ 410 NJ 410 NJ 410 NJ 410 NJ 410 4000
+preplace netloc HPD_1 1 0 12 NJ 780 NJ 780 NJ 780 NJ 790 NJ 510 NJ 510 NJ 510 NJ 510 NJ 510 NJ 510 NJ 510 NJ
+preplace netloc HDMI_RX_CLK_P_1 1 0 1 NJ
+preplace netloc mig_7series_0_ddr3_reset_n 1 8 7 NJ 1550 NJ 1550 NJ 1550 NJ 1550 NJ 1550 NJ 1550 NJ
+preplace netloc LV_SCL_1 1 0 11 NJ 800 NJ 800 NJ 800 NJ 800 NJ 790 NJ 790 NJ 700 NJ 700 NJ 700 NJ 700 NJ
+preplace netloc PCI_CLK_N_1 1 0 5 NJ 1760 NJ 1760 NJ 1760 NJ 1760 NJ
+preplace netloc mig_7series_0_ddr3_ck_n 1 8 7 NJ 1590 NJ 1590 NJ 1590 NJ 1590 NJ 1590 NJ 1590 NJ
+preplace netloc mig_7series_0_ddr3_dm 1 8 7 NJ 1650 NJ 1650 NJ 1650 NJ 1650 NJ 1650 NJ 1650 NJ
+preplace netloc dvi_encoder_v2_0_TMDS_2_N 1 14 1 NJ
+preplace netloc dvi_decoder_v2_0_hdcp_ena 1 4 8 NJ 470 NJ 470 NJ 470 NJ 470 NJ 470 NJ 470 NJ 470 3650
+preplace netloc xlconstant_3_dout 1 11 1 NJ
+preplace netloc mig_7series_0_ddr3_ck_p 1 8 7 NJ 1570 NJ 1570 NJ 1570 NJ 1570 NJ 1570 NJ 1570 NJ
+preplace netloc axi_vdma_0_M_AXIS_MM2S 1 6 1 1970
+preplace netloc chroma_key_0_blue_blend 1 13 1 N
+preplace netloc xlslice_27_Dout 1 12 1 NJ
+preplace netloc dvi_encoder_v2_0_TMDS_2_P 1 14 1 NJ
+preplace netloc axi_pcie_0_M_AXI 1 6 1 2110
+preplace netloc chroma_key_0_vid_gb_pipe 1 13 1 N
+preplace netloc SYSCLK_LV_1 1 0 2 NJ 1010 NJ
+preplace netloc proc_sys_reset_3_peripheral_aresetn 1 7 1 2460
+preplace netloc dvi_encoder_v2_0_TMDS_1_N 1 14 1 NJ
+preplace netloc HDMI_RX_CLK_N_1 1 0 1 NJ
+preplace netloc rst_axi_pcie_0_125M_peripheral_reset 1 5 5 N 900 NJ 780 NJ 780 NJ 780 NJ
+preplace netloc proc_sys_reset_0_peripheral_reset 1 3 1 840
+preplace netloc mig_7series_0_ddr3_cas_n 1 8 7 NJ 1510 NJ 1510 NJ 1510 NJ 1510 NJ 1510 NJ 1510 NJ
+preplace netloc xlconcat_0_dout 1 8 5 NJ 1080 NJ 1040 NJ 1050 NJ 1130 4000
+preplace netloc xlslice_3_Dout 1 12 1 4010
+preplace netloc PCI_CLK_P_1 1 4 1 1200
+preplace netloc dvi_encoder_v2_0_TMDS_1_P 1 14 1 NJ
+preplace netloc chroma_key_0_dat_gb_pipe 1 13 1 N
+preplace netloc reg_expander_0_bank0 1 10 2 3380 820 NJ
+preplace netloc mig_7series_0_mmcm_locked 1 5 4 1600 1800 NJ 1800 NJ 1800 2760
+preplace netloc dvi_decoder_v2_0_sdout 1 4 9 NJ 360 NJ 450 NJ 450 NJ 450 NJ 450 NJ 450 NJ 450 NJ 450 3950
+preplace netloc dvi_decoder_v2_0_blue 1 4 9 NJ 410 NJ 410 NJ 400 NJ 400 NJ 400 NJ 400 NJ 400 NJ 400 3980
+preplace netloc xlslice_12_Dout 1 9 1 2950
+preplace netloc reg_expander_0_bank1 1 10 1 3340
+preplace netloc dvi_decoder_v2_0_de 1 4 9 NJ 180 1610 380 2080 380 NJ 380 NJ 380 NJ 380 NJ 380 3690 380 NJ
+preplace netloc util_ds_buf_0_IBUF_OUT 1 5 1 1560
+preplace netloc v_tc_0_hblank_out 1 6 1 NJ
+preplace netloc c_counter_binary_0_Q 1 13 1 NJ
+preplace netloc xlslice_5_Dout 1 10 1 NJ
+preplace netloc dvi_decoder_v2_0_red 1 4 9 NJ 380 NJ 440 NJ 440 NJ 440 NJ 440 NJ 440 NJ 440 NJ 440 3990
+preplace netloc dvi_encoder_v2_0_TMDS_CLK_N 1 14 1 NJ
+preplace netloc mig_7series_0_ui_clk_sync_rst 1 5 4 1610 1030 NJ 1220 NJ 1220 2750
+preplace netloc xlconstant_5_dout 1 6 1 NJ
+preplace netloc HDMI_RX_1_P_1 1 0 4 NJ 370 NJ 370 NJ 370 NJ
+preplace netloc rst_mig_7series_0_100M_peripheral_aresetn 1 6 2 2120 1600 NJ
+preplace netloc xlconstant_1_dout 1 8 1 2750
+preplace netloc util_ds_buf_10_BUFG_O 1 2 2 510 310 NJ
+preplace netloc dvi_encoder_v2_0_TMDS_CLK_P 1 14 1 NJ
+preplace netloc xlslice_7_Dout 1 14 1 NJ
+preplace netloc xlslice_4_Dout 1 12 1 NJ
+preplace netloc proc_sys_reset_1_interconnect_aresetn 1 5 2 NJ 760 2040
+preplace netloc xlslice_1_Dout 1 12 1 4060
+preplace netloc rst_axi_pcie_0_125M_peripheral_aresetn 1 5 3 N 940 2030 1200 NJ
+preplace netloc mig_7series_0_ddr3_addr 1 8 7 NJ 1450 NJ 1450 NJ 1450 NJ 1450 NJ 1450 NJ 1450 NJ
+preplace netloc chroma_key_0_red_di_pipe 1 13 1 4380
+preplace netloc dvi_decoder_v2_0_hsync 1 4 9 NJ 140 NJ 200 1960 40 NJ 350 NJ 350 NJ 350 NJ 350 3670 360 NJ
+preplace netloc dvi_decoder_v2_0_p_clk 1 4 10 1150 600 1530 770 2130 580 NJ 580 NJ 580 2950 580 NJ 580 3640 520 4040 120 4360
+preplace netloc HDMI_RX_0_N_1 1 0 4 NJ 350 NJ 350 NJ 350 NJ
+preplace netloc util_ds_buf_9_IBUF_OUT 1 1 1 NJ
+preplace netloc xlconstant_8_dout 1 5 1 1520
+preplace netloc PCI_RX_P_1 1 0 7 NJ 930 NJ 930 NJ 930 NJ 930 NJ 1020 NJ 930 1960
+preplace netloc chroma_key_0_hsync_pipe 1 13 1 N
+preplace netloc c_shift_ram_2_Q 1 13 1 4360
+preplace netloc dvi_decoder_v2_0_line_end 1 4 8 NJ 530 NJ 530 NJ 530 NJ 530 NJ 530 NJ 530 NJ 530 3660
+preplace netloc xlslice_0_Dout 1 14 1 NJ
+preplace netloc mig_7series_0_ddr3_cs_n 1 8 7 NJ 1630 NJ 1630 NJ 1630 NJ 1630 NJ 1630 NJ 1630 NJ
+preplace netloc dvi_decoder_v2_0_encoding 1 4 9 NJ 430 NJ 430 NJ 430 NJ 430 NJ 430 NJ 430 NJ 430 NJ 430 3980
+preplace netloc HDMI_RX_2_P_1 1 0 4 NJ 410 NJ 410 NJ 410 NJ
+preplace netloc mig_7series_0_ddr3_ba 1 8 7 NJ 1470 NJ 1470 NJ 1470 NJ 1470 NJ 1470 NJ 1470 NJ
+preplace netloc chroma_key_0_vsync_pipe 1 13 1 N
+preplace netloc xlslice_6_Dout 1 10 2 NJ 1280 NJ
+preplace netloc Net 1 8 7 NJ 1430 NJ 1430 NJ 1430 NJ 1430 NJ 1430 NJ 1430 NJ
+preplace netloc xlslice_8_Dout 1 12 1 4050
+preplace netloc Net1 1 8 7 NJ 1390 NJ 1390 NJ 1390 NJ 1390 NJ 1390 NJ 1390 NJ
+preplace netloc Net2 1 8 7 NJ 1410 NJ 1410 NJ 1410 NJ 1410 NJ 1410 NJ 1410 NJ
+preplace netloc PCI_RX_N_1 1 0 7 NJ 1090 NJ 1090 NJ 1090 NJ 1040 NJ 1040 NJ 960 1950
+preplace netloc chroma_key_0_blue_di_pipe 1 13 1 4360
+preplace netloc hdcp_snoop_0_An 1 11 1 3680
+preplace netloc dvi_decoder_v2_0_vsync 1 4 9 NJ 160 NJ 390 2090 390 NJ 370 NJ 370 NJ 370 NJ 370 3680 370 NJ
+preplace netloc Net3 1 0 10 NJ 570 NJ 570 520 610 NJ 810 1190 810 NJ 810 2020 1270 NJ 1270 NJ 1110 NJ
+preplace netloc Net4 1 7 5 NJ 170 NJ 170 NJ 170 NJ 170 3670
+preplace netloc LV_SDA_1 1 0 11 NJ 820 NJ 820 NJ 820 NJ 820 NJ 800 NJ 800 NJ 710 NJ 710 NJ 710 NJ 710 NJ
+preplace netloc axi_pcie_0_pci_exp_txn 1 6 9 NJ 1250 NJ 1250 NJ 1250 NJ 1240 NJ 1240 NJ 1240 NJ 1270 NJ 1270 NJ
+preplace netloc dvi_decoder_v2_0_px5_clk 1 4 10 1100 10 NJ 10 NJ 10 NJ 10 NJ 10 NJ 10 NJ 10 NJ 10 NJ 10 NJ
+preplace netloc axi_pcie_0_pci_exp_txp 1 6 9 NJ 1240 NJ 1230 NJ 1230 NJ 1230 NJ 1170 NJ 1170 NJ 1170 NJ 1170 NJ
+preplace netloc c_shift_ram_1_Q 1 13 1 4350
+preplace netloc xlslice_14_Dout 1 9 1 2970
+preplace netloc util_ds_buf_1_BUFG_O 1 2 1 NJ
+preplace netloc xlconstant_6_dout 1 6 1 NJ
+preplace netloc proc_sys_reset_1_peripheral_aresetn 1 5 2 1610 780 2060
+preplace netloc chroma_key_0_green_di_pipe 1 13 1 4370
+preplace netloc dvi_decoder_v2_0_green 1 4 9 NJ 400 NJ 400 NJ 30 NJ 30 NJ 30 NJ 30 NJ 30 NJ 30 4070
+preplace netloc hdcp_engine_0_cipher_stream 1 12 1 4020
+preplace netloc hdcp_snoop_0_Aksv14_write 1 11 1 3650
+preplace netloc hdcp_snoop_0_reg_dout 1 11 1 3630
+preplace netloc mig_7series_0_ui_clk 1 5 4 1600 990 2090 1190 NJ 1190 2760
+preplace netloc axi_mem_intercon_M02_AXI 1 7 1 N
+preplace netloc chroma_key_0_ctl_code_pipe 1 13 1 4350
+preplace netloc proc_sys_reset_1_peripheral_reset 1 5 7 NJ 750 NJ 680 NJ 680 NJ 680 NJ 680 NJ 680 3640
+preplace netloc HDMI_RX_0_P_1 1 0 4 NJ 330 NJ 330 NJ 330 NJ
+preplace netloc clk_wiz_0_clk_out1 1 3 5 NJ 980 NJ 1000 NJ 970 1990 1400 NJ
+preplace netloc dvi_encoder_v2_0_TMDS_0_N 1 14 1 NJ
+preplace netloc HDMI_RX_2_N_1 1 0 4 NJ 430 NJ 430 NJ 430 NJ
+preplace netloc clk_wiz_0_clk_out2 1 3 5 860 1000 NJ 1010 NJ 1000 NJ 1280 2470
+preplace netloc xlslice_13_Dout 1 9 1 2960
+preplace netloc clk_wiz_0_clk_out3 1 3 10 NJ 1020 NJ 1030 NJ 1020 NJ 1210 NJ 1210 NJ 1210 NJ 1220 NJ 1220 NJ 1220 NJ
+preplace netloc xlconstant_0_dout 1 5 1 NJ
+preplace netloc dvi_encoder_v2_0_TMDS_0_P 1 14 1 NJ
+preplace netloc axi_mem_intercon_M00_AXI 1 7 1 2480
+preplace netloc chroma_key_0_dat_ena_pipe 1 13 1 N
+preplace netloc chroma_key_0_de_pipe 1 13 1 N
+preplace netloc dvi_decoder_v2_0_ctl_code 1 4 9 NJ 520 NJ 520 NJ 520 NJ 520 NJ 520 NJ 520 NJ 520 3630 510 NJ
+preplace netloc clk_wiz_0_clk_out4 1 3 8 840 1050 NJ 1050 NJ 980 NJ 1230 NJ 1180 NJ 1180 3010 940 NJ
+preplace netloc axi_gpio_0_gpio_io_o 1 8 4 2770 1090 NJ 930 NJ 1040 3690
+preplace netloc dvi_decoder_v2_0_green_di 1 4 9 NJ 490 NJ 490 NJ 490 NJ 490 NJ 490 NJ 490 NJ 490 NJ 490 3980
+preplace netloc dvi_decoder_v2_0_blue_di 1 4 9 NJ 460 NJ 460 NJ 460 NJ 460 NJ 460 NJ 460 NJ 460 NJ 460 4000
+preplace netloc mig_7series_0_ddr3_ras_n 1 8 7 NJ 1490 NJ 1490 NJ 1490 NJ 1490 NJ 1490 NJ 1490 NJ
+preplace netloc chroma_key_0_green_blend 1 13 1 N
+preplace netloc dvi_decoder_v2_0_reset 1 4 10 1150 20 NJ 20 NJ 20 NJ 20 NJ 20 NJ 20 NJ 20 NJ 20 NJ 20 NJ
+preplace netloc HDMI_RX_1_N_1 1 0 4 NJ 390 NJ 390 NJ 390 NJ
+preplace netloc chroma_key_0_red_blend 1 13 1 N
+preplace netloc mig_7series_0_ddr3_cke 1 8 7 NJ 1610 NJ 1610 NJ 1610 NJ 1610 NJ 1610 NJ 1610 NJ
+preplace netloc xlconstant_7_dout 1 6 1 NJ
+preplace netloc rst_axi_pcie_0_125M_interconnect_aresetn 1 5 2 1550 920 NJ
+levelinfo -pg 1 0 150 400 680 980 1360 1780 2290 2620 2860 3170 3500 3820 4210 4510 4660 -top 0 -bot 1930
+",
+}
+{
+   da_axi4_cnt: "5",
+   da_board_cnt: "3",
+}

@@ -1,0 +1,1197 @@
+
+################################################################
+# This is a generated script based on design: overlay1
+#
+# Though there are limitations about the generated script,
+# the main purpose of this utility is to make learning
+# IP Integrator Tcl commands easier.
+################################################################
+
+namespace eval _tcl {
+proc get_script_folder {} {
+   set script_path [file normalize [info script]]
+   set script_folder [file dirname $script_path]
+   return $script_folder
+}
+}
+variable script_folder
+set script_folder [_tcl::get_script_folder]
+
+################################################################
+# Check if script is running in correct Vivado version.
+################################################################
+set scripts_vivado_version 2016.1
+set current_vivado_version [version -short]
+
+if { [string first $scripts_vivado_version $current_vivado_version] == -1 } {
+   puts ""
+   catch {common::send_msg_id "BD_TCL-109" "ERROR" "This script was generated using Vivado <$scripts_vivado_version> and is being run in <$current_vivado_version> of Vivado. Please run the script in Vivado <$scripts_vivado_version> then open the design in Vivado <$current_vivado_version>. Upgrade the design by running \"Tools => Report => Report IP Status...\", then run write_bd_tcl to create an updated script."}
+
+   return 1
+}
+
+################################################################
+# START
+################################################################
+
+# To test this script, run the following commands from Vivado Tcl console:
+# source overlay1_script.tcl
+
+# If there is no project opened, this script will create a
+# project, but make sure you do not have an existing project
+# <./myproj/project_1.xpr> in the current working folder.
+
+set list_projs [get_projects -quiet]
+if { $list_projs eq "" } {
+   create_project project_1 myproj -part xc7a50tcsg325-2
+}
+
+
+# CHANGE DESIGN NAME HERE
+set design_name overlay1
+
+# If you do not already have an existing IP Integrator design open,
+# you can create a design using the following command:
+#    create_bd_design $design_name
+
+# Creating design if needed
+set errMsg ""
+set nRet 0
+
+set cur_design [current_bd_design -quiet]
+set list_cells [get_bd_cells -quiet]
+
+if { ${design_name} eq "" } {
+   # USE CASES:
+   #    1) Design_name not set
+
+   set errMsg "Please set the variable <design_name> to a non-empty value."
+   set nRet 1
+
+} elseif { ${cur_design} ne "" && ${list_cells} eq "" } {
+   # USE CASES:
+   #    2): Current design opened AND is empty AND names same.
+   #    3): Current design opened AND is empty AND names diff; design_name NOT in project.
+   #    4): Current design opened AND is empty AND names diff; design_name exists in project.
+
+   if { $cur_design ne $design_name } {
+      common::send_msg_id "BD_TCL-001" "INFO" "Changing value of <design_name> from <$design_name> to <$cur_design> since current design is empty."
+      set design_name [get_property NAME $cur_design]
+   }
+   common::send_msg_id "BD_TCL-002" "INFO" "Constructing design in IPI design <$cur_design>..."
+
+} elseif { ${cur_design} ne "" && $list_cells ne "" && $cur_design eq $design_name } {
+   # USE CASES:
+   #    5) Current design opened AND has components AND same names.
+
+   set errMsg "Design <$design_name> already exists in your project, please set the variable <design_name> to another value."
+   set nRet 1
+} elseif { [get_files -quiet ${design_name}.bd] ne "" } {
+   # USE CASES: 
+   #    6) Current opened design, has components, but diff names, design_name exists in project.
+   #    7) No opened design, design_name exists in project.
+
+   set errMsg "Design <$design_name> already exists in your project, please set the variable <design_name> to another value."
+   set nRet 2
+
+} else {
+   # USE CASES:
+   #    8) No opened design, design_name not in project.
+   #    9) Current opened design, has components, but diff names, design_name not in project.
+
+   common::send_msg_id "BD_TCL-003" "INFO" "Currently there is no design <$design_name> in project, so creating one..."
+
+   create_bd_design $design_name
+
+   common::send_msg_id "BD_TCL-004" "INFO" "Making design <$design_name> as current_bd_design."
+   current_bd_design $design_name
+
+}
+
+common::send_msg_id "BD_TCL-005" "INFO" "Currently the variable <design_name> is equal to \"$design_name\"."
+
+if { $nRet != 0 } {
+   catch {common::send_msg_id "BD_TCL-114" "ERROR" $errMsg}
+   return $nRet
+}
+
+
+##################################################################
+# MIG PRJ FILE TCL PROCs
+##################################################################
+
+proc write_mig_file_overlay1_mig_7series_0_0 { str_mig_prj_filepath } {
+
+   set mig_prj_file [open $str_mig_prj_filepath  w+]
+
+   puts $mig_prj_file {<?xml version='1.0' encoding='UTF-8'?>}
+   puts $mig_prj_file {<!-- IMPORTANT: This is an internal file that has been generated by the MIG software. Any direct editing or changes made to this file may result in unpredictable behavior or data corruption. It is strongly advised that users do not edit the contents of this file. Re-run the MIG GUI with the required settings if any of the options provided below need to be altered. -->}
+   puts $mig_prj_file {<Project NoOfControllers="1" >}
+   puts $mig_prj_file {    <ModuleName>overlay1_mig_7series_0_0</ModuleName>}
+   puts $mig_prj_file {    <dci_inouts_inputs>1</dci_inouts_inputs>}
+   puts $mig_prj_file {    <dci_inputs>1</dci_inputs>}
+   puts $mig_prj_file {    <Debug_En>OFF</Debug_En>}
+   puts $mig_prj_file {    <DataDepth_En>1024</DataDepth_En>}
+   puts $mig_prj_file {    <LowPower_En>ON</LowPower_En>}
+   puts $mig_prj_file {    <XADC_En>Enabled</XADC_En>}
+   puts $mig_prj_file {    <TargetFPGA>xc7a50t-csg325/-2</TargetFPGA>}
+   puts $mig_prj_file {    <Version>3.0</Version>}
+   puts $mig_prj_file {    <SystemClock>No Buffer</SystemClock>}
+   puts $mig_prj_file {    <ReferenceClock>No Buffer</ReferenceClock>}
+   puts $mig_prj_file {    <SysResetPolarity>ACTIVE LOW</SysResetPolarity>}
+   puts $mig_prj_file {    <BankSelectionFlag>FALSE</BankSelectionFlag>}
+   puts $mig_prj_file {    <InternalVref>0</InternalVref>}
+   puts $mig_prj_file {    <dci_hr_inouts_inputs>50 Ohms</dci_hr_inouts_inputs>}
+   puts $mig_prj_file {    <dci_cascade>0</dci_cascade>}
+   puts $mig_prj_file {    <Controller number="0" >}
+   puts $mig_prj_file {        <MemoryDevice>DDR3_SDRAM/Components/MT41J128M16XX-125</MemoryDevice>}
+   puts $mig_prj_file {        <TimePeriod>2500</TimePeriod>}
+   puts $mig_prj_file {        <VccAuxIO>1.8V</VccAuxIO>}
+   puts $mig_prj_file {        <PHYRatio>4:1</PHYRatio>}
+   puts $mig_prj_file {        <InputClkFreq>400</InputClkFreq>}
+   puts $mig_prj_file {        <UIExtraClocks>0</UIExtraClocks>}
+   puts $mig_prj_file {        <MMCM_VCO>800</MMCM_VCO>}
+   puts $mig_prj_file {        <MMCMClkOut0> 1.000</MMCMClkOut0>}
+   puts $mig_prj_file {        <MMCMClkOut1>1</MMCMClkOut1>}
+   puts $mig_prj_file {        <MMCMClkOut2>1</MMCMClkOut2>}
+   puts $mig_prj_file {        <MMCMClkOut3>1</MMCMClkOut3>}
+   puts $mig_prj_file {        <MMCMClkOut4>1</MMCMClkOut4>}
+   puts $mig_prj_file {        <DataWidth>32</DataWidth>}
+   puts $mig_prj_file {        <DeepMemory>1</DeepMemory>}
+   puts $mig_prj_file {        <DataMask>1</DataMask>}
+   puts $mig_prj_file {        <ECC>Disabled</ECC>}
+   puts $mig_prj_file {        <Ordering>Normal</Ordering>}
+   puts $mig_prj_file {        <CustomPart>FALSE</CustomPart>}
+   puts $mig_prj_file {        <NewPartName></NewPartName>}
+   puts $mig_prj_file {        <RowAddress>14</RowAddress>}
+   puts $mig_prj_file {        <ColAddress>10</ColAddress>}
+   puts $mig_prj_file {        <BankAddress>3</BankAddress>}
+   puts $mig_prj_file {        <MemoryVoltage>1.5V</MemoryVoltage>}
+   puts $mig_prj_file {        <C0_MEM_SIZE>536870912</C0_MEM_SIZE>}
+   puts $mig_prj_file {        <UserMemoryAddressMap>BANK_ROW_COLUMN</UserMemoryAddressMap>}
+   puts $mig_prj_file {        <PinSelection>}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="U15" SLEW="" name="ddr3_addr[0]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="R16" SLEW="" name="ddr3_addr[10]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="N17" SLEW="" name="ddr3_addr[11]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="V17" SLEW="" name="ddr3_addr[12]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="R17" SLEW="" name="ddr3_addr[13]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="M17" SLEW="" name="ddr3_addr[1]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="N18" SLEW="" name="ddr3_addr[2]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="U16" SLEW="" name="ddr3_addr[3]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="R18" SLEW="" name="ddr3_addr[4]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="P18" SLEW="" name="ddr3_addr[5]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="T18" SLEW="" name="ddr3_addr[6]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="T17" SLEW="" name="ddr3_addr[7]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="U17" SLEW="" name="ddr3_addr[8]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="N16" SLEW="" name="ddr3_addr[9]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="T15" SLEW="" name="ddr3_ba[0]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="M16" SLEW="" name="ddr3_ba[1]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="P15" SLEW="" name="ddr3_ba[2]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="K17" SLEW="" name="ddr3_cas_n" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="DIFF_SSTL15" PADName="R15" SLEW="" name="ddr3_ck_n[0]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="DIFF_SSTL15" PADName="P14" SLEW="" name="ddr3_ck_p[0]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="K15" SLEW="" name="ddr3_cke[0]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="J16" SLEW="" name="ddr3_cs_n[0]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="D9" SLEW="" name="ddr3_dm[0]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="B14" SLEW="" name="ddr3_dm[1]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="F14" SLEW="" name="ddr3_dm[2]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="C18" SLEW="" name="ddr3_dm[3]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="D11" SLEW="" name="ddr3_dq[0]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="E13" SLEW="" name="ddr3_dq[10]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="B12" SLEW="" name="ddr3_dq[11]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="C13" SLEW="" name="ddr3_dq[12]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="A12" SLEW="" name="ddr3_dq[13]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="D13" SLEW="" name="ddr3_dq[14]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="A13" SLEW="" name="ddr3_dq[15]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="H18" SLEW="" name="ddr3_dq[16]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="G17" SLEW="" name="ddr3_dq[17]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="G16" SLEW="" name="ddr3_dq[18]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="F17" SLEW="" name="ddr3_dq[19]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="B11" SLEW="" name="ddr3_dq[1]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="G14" SLEW="" name="ddr3_dq[20]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="E18" SLEW="" name="ddr3_dq[21]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="H16" SLEW="" name="ddr3_dq[22]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="H17" SLEW="" name="ddr3_dq[23]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="C17" SLEW="" name="ddr3_dq[24]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="D16" SLEW="" name="ddr3_dq[25]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="B17" SLEW="" name="ddr3_dq[26]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="E16" SLEW="" name="ddr3_dq[27]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="C16" SLEW="" name="ddr3_dq[28]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="E17" SLEW="" name="ddr3_dq[29]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="D8" SLEW="" name="ddr3_dq[2]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="D15" SLEW="" name="ddr3_dq[30]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="D18" SLEW="" name="ddr3_dq[31]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="C11" SLEW="" name="ddr3_dq[3]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="C8" SLEW="" name="ddr3_dq[4]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="B10" SLEW="" name="ddr3_dq[5]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="C9" SLEW="" name="ddr3_dq[6]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="A10" SLEW="" name="ddr3_dq[7]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="A15" SLEW="" name="ddr3_dq[8]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="A14" SLEW="" name="ddr3_dq[9]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="DIFF_SSTL15" PADName="A9" SLEW="" name="ddr3_dqs_n[0]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="DIFF_SSTL15" PADName="B15" SLEW="" name="ddr3_dqs_n[1]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="DIFF_SSTL15" PADName="F15" SLEW="" name="ddr3_dqs_n[2]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="DIFF_SSTL15" PADName="A17" SLEW="" name="ddr3_dqs_n[3]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="DIFF_SSTL15" PADName="B9" SLEW="" name="ddr3_dqs_p[0]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="DIFF_SSTL15" PADName="C14" SLEW="" name="ddr3_dqs_p[1]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="DIFF_SSTL15" PADName="G15" SLEW="" name="ddr3_dqs_p[2]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="DIFF_SSTL15" PADName="B16" SLEW="" name="ddr3_dqs_p[3]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="K18" SLEW="" name="ddr3_odt[0]" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="L18" SLEW="" name="ddr3_ras_n" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="LVCMOS15" PADName="V16" SLEW="" name="ddr3_reset_n" IN_TERM="" />}
+   puts $mig_prj_file {            <Pin VCCAUX_IO="" IOSTANDARD="SSTL15" PADName="P16" SLEW="" name="ddr3_we_n" IN_TERM="" />}
+   puts $mig_prj_file {        </PinSelection>}
+   puts $mig_prj_file {        <System_Control>}
+   puts $mig_prj_file {            <Pin PADName="No connect" Bank="Select Bank" name="sys_rst" />}
+   puts $mig_prj_file {            <Pin PADName="No connect" Bank="Select Bank" name="init_calib_complete" />}
+   puts $mig_prj_file {            <Pin PADName="No connect" Bank="Select Bank" name="tg_compare_error" />}
+   puts $mig_prj_file {        </System_Control>}
+   puts $mig_prj_file {        <TimingParameters>}
+   puts $mig_prj_file {            <Parameters twtr="7.5" trrd="7.5" trefi="7.8" tfaw="40" trtp="7.5" tcke="5" trfc="160" trp="13.75" tras="35" trcd="13.75" />}
+   puts $mig_prj_file {        </TimingParameters>}
+   puts $mig_prj_file {        <mrBurstLength name="Burst Length" >8 - Fixed</mrBurstLength>}
+   puts $mig_prj_file {        <mrBurstType name="Read Burst Type and Length" >Sequential</mrBurstType>}
+   puts $mig_prj_file {        <mrCasLatency name="CAS Latency" >6</mrCasLatency>}
+   puts $mig_prj_file {        <mrMode name="Mode" >Normal</mrMode>}
+   puts $mig_prj_file {        <mrDllReset name="DLL Reset" >No</mrDllReset>}
+   puts $mig_prj_file {        <mrPdMode name="DLL control for precharge PD" >Slow Exit</mrPdMode>}
+   puts $mig_prj_file {        <emrDllEnable name="DLL Enable" >Enable</emrDllEnable>}
+   puts $mig_prj_file {        <emrOutputDriveStrength name="Output Driver Impedance Control" >RZQ/6</emrOutputDriveStrength>}
+   puts $mig_prj_file {        <emrMirrorSelection name="Address Mirroring" >Disable</emrMirrorSelection>}
+   puts $mig_prj_file {        <emrCSSelection name="Controller Chip Select Pin" >Enable</emrCSSelection>}
+   puts $mig_prj_file {        <emrRTT name="RTT (nominal) - On Die Termination (ODT)" >RZQ/4</emrRTT>}
+   puts $mig_prj_file {        <emrPosted name="Additive Latency (AL)" >0</emrPosted>}
+   puts $mig_prj_file {        <emrOCD name="Write Leveling Enable" >Disabled</emrOCD>}
+   puts $mig_prj_file {        <emrDQS name="TDQS enable" >Enabled</emrDQS>}
+   puts $mig_prj_file {        <emrRDQS name="Qoff" >Output Buffer Enabled</emrRDQS>}
+   puts $mig_prj_file {        <mr2PartialArraySelfRefresh name="Partial-Array Self Refresh" >Full Array</mr2PartialArraySelfRefresh>}
+   puts $mig_prj_file {        <mr2CasWriteLatency name="CAS write latency" >5</mr2CasWriteLatency>}
+   puts $mig_prj_file {        <mr2AutoSelfRefresh name="Auto Self Refresh" >Enabled</mr2AutoSelfRefresh>}
+   puts $mig_prj_file {        <mr2SelfRefreshTempRange name="High Temparature Self Refresh Rate" >Normal</mr2SelfRefreshTempRange>}
+   puts $mig_prj_file {        <mr2RTTWR name="RTT_WR - Dynamic On Die Termination (ODT)" >Dynamic ODT off</mr2RTTWR>}
+   puts $mig_prj_file {        <PortInterface>AXI</PortInterface>}
+   puts $mig_prj_file {        <AXIParameters>}
+   puts $mig_prj_file {            <C0_C_RD_WR_ARB_ALGORITHM>RD_PRI_REG</C0_C_RD_WR_ARB_ALGORITHM>}
+   puts $mig_prj_file {            <C0_S_AXI_ADDR_WIDTH>29</C0_S_AXI_ADDR_WIDTH>}
+   puts $mig_prj_file {            <C0_S_AXI_DATA_WIDTH>256</C0_S_AXI_DATA_WIDTH>}
+   puts $mig_prj_file {            <C0_S_AXI_ID_WIDTH>1</C0_S_AXI_ID_WIDTH>}
+   puts $mig_prj_file {            <C0_S_AXI_SUPPORTS_NARROW_BURST>1</C0_S_AXI_SUPPORTS_NARROW_BURST>}
+   puts $mig_prj_file {        </AXIParameters>}
+   puts $mig_prj_file {    </Controller>}
+   puts $mig_prj_file {</Project>}
+
+   close $mig_prj_file
+}
+# End of write_mig_file_overlay1_mig_7series_0_0()
+
+
+
+##################################################################
+# DESIGN PROCs
+##################################################################
+
+
+
+# Procedure to create entire design; Provide argument to make
+# procedure reusable. If parentCell is "", will use root.
+proc create_root_design { parentCell } {
+
+  variable script_folder
+
+  if { $parentCell eq "" } {
+     set parentCell [get_bd_cells /]
+  }
+
+  # Get object for parentCell
+  set parentObj [get_bd_cells $parentCell]
+  if { $parentObj == "" } {
+     catch {common::send_msg_id "BD_TCL-100" "ERROR" "Unable to find parent cell <$parentCell>!"}
+     return
+  }
+
+  # Make sure parentObj is hier blk
+  set parentType [get_property TYPE $parentObj]
+  if { $parentType ne "hier" } {
+     catch {common::send_msg_id "BD_TCL-101" "ERROR" "Parent <$parentObj> has TYPE = <$parentType>. Expected to be <hier>."}
+     return
+  }
+
+  # Save current instance; Restore later
+  set oldCurInst [current_bd_instance .]
+
+  # Set parent object as current
+  current_bd_instance $parentObj
+
+
+  # Create interface ports
+
+  # Create ports
+  set BLINKENLIGHT [ create_bd_port -dir O -from 0 -to 0 BLINKENLIGHT ]
+  set HDMI_RX_0_N [ create_bd_port -dir I HDMI_RX_0_N ]
+  set HDMI_RX_0_P [ create_bd_port -dir I HDMI_RX_0_P ]
+  set HDMI_RX_1_N [ create_bd_port -dir I HDMI_RX_1_N ]
+  set HDMI_RX_1_P [ create_bd_port -dir I HDMI_RX_1_P ]
+  set HDMI_RX_2_N [ create_bd_port -dir I HDMI_RX_2_N ]
+  set HDMI_RX_2_P [ create_bd_port -dir I HDMI_RX_2_P ]
+  set HDMI_RX_CLK_N [ create_bd_port -dir I HDMI_RX_CLK_N ]
+  set HDMI_RX_CLK_P [ create_bd_port -dir I HDMI_RX_CLK_P ]
+  set HDMI_TX_0_N [ create_bd_port -dir O -from 0 -to 0 HDMI_TX_0_N ]
+  set HDMI_TX_0_P [ create_bd_port -dir O -from 0 -to 0 HDMI_TX_0_P ]
+  set HDMI_TX_1_N [ create_bd_port -dir O -from 0 -to 0 HDMI_TX_1_N ]
+  set HDMI_TX_1_P [ create_bd_port -dir O -from 0 -to 0 HDMI_TX_1_P ]
+  set HDMI_TX_2_N [ create_bd_port -dir O -from 0 -to 0 HDMI_TX_2_N ]
+  set HDMI_TX_2_P [ create_bd_port -dir O -from 0 -to 0 HDMI_TX_2_P ]
+  set HDMI_TX_CLK_N [ create_bd_port -dir O -from 0 -to 0 HDMI_TX_CLK_N ]
+  set HDMI_TX_CLK_P [ create_bd_port -dir O -from 0 -to 0 HDMI_TX_CLK_P ]
+  set HPD [ create_bd_port -dir I HPD ]
+  set HPD_OVER [ create_bd_port -dir O -from 0 -to 0 HPD_OVER ]
+  set LV_SCL [ create_bd_port -dir I LV_SCL ]
+  set LV_SDA [ create_bd_port -dir I LV_SDA ]
+  set PCI_CLK_N [ create_bd_port -dir I -type clk PCI_CLK_N ]
+  set_property -dict [ list \
+CONFIG.FREQ_HZ {100000000} \
+ ] $PCI_CLK_N
+  set PCI_CLK_P [ create_bd_port -dir I -type clk PCI_CLK_P ]
+  set_property -dict [ list \
+CONFIG.FREQ_HZ {100000000} \
+ ] $PCI_CLK_P
+  set PCI_RX_N [ create_bd_port -dir I PCI_RX_N ]
+  set PCI_RX_P [ create_bd_port -dir I PCI_RX_P ]
+  set PCI_TX_N [ create_bd_port -dir O -from 0 -to 0 PCI_TX_N ]
+  set PCI_TX_P [ create_bd_port -dir O -from 0 -to 0 PCI_TX_P ]
+  set PERST_N [ create_bd_port -dir I -type rst PERST_N ]
+  set SYSCLK [ create_bd_port -dir I -type clk SYSCLK ]
+  set_property -dict [ list \
+CONFIG.FREQ_HZ {50000000} \
+ ] $SYSCLK
+  set ddr3_a [ create_bd_port -dir O -from 13 -to 0 ddr3_a ]
+  set ddr3_ba [ create_bd_port -dir O -from 2 -to 0 ddr3_ba ]
+  set ddr3_cas_n [ create_bd_port -dir O ddr3_cas_n ]
+  set ddr3_ck_n [ create_bd_port -dir O -from 0 -to 0 ddr3_ck_n ]
+  set ddr3_ck_p [ create_bd_port -dir O -from 0 -to 0 -type clk ddr3_ck_p ]
+  set ddr3_cke [ create_bd_port -dir O -from 0 -to 0 -type ce ddr3_cke ]
+  set ddr3_cs_n [ create_bd_port -dir O -from 0 -to 0 ddr3_cs_n ]
+  set ddr3_dm [ create_bd_port -dir O -from 3 -to 0 ddr3_dm ]
+  set ddr3_dq [ create_bd_port -dir IO -from 31 -to 0 -type data ddr3_dq ]
+  set ddr3_dqs_n [ create_bd_port -dir IO -from 3 -to 0 ddr3_dqs_n ]
+  set ddr3_dqs_p [ create_bd_port -dir IO -from 3 -to 0 ddr3_dqs_p ]
+  set ddr3_odt [ create_bd_port -dir O -from 0 -to 0 ddr3_odt ]
+  set ddr3_ras_n [ create_bd_port -dir O ddr3_ras_n ]
+  set ddr3_reset_n [ create_bd_port -dir O ddr3_reset_n ]
+  set ddr3_we_n [ create_bd_port -dir O ddr3_we_n ]
+
+  # Create instance: axi_gpio_0, and set properties
+  set axi_gpio_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_gpio:2.0 axi_gpio_0 ]
+  set_property -dict [ list \
+CONFIG.C_DOUT_DEFAULT {0x00000001} \
+CONFIG.C_IS_DUAL {1} \
+ ] $axi_gpio_0
+
+  # Create instance: axi_mem_intercon, and set properties
+  set axi_mem_intercon [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_mem_intercon ]
+  set_property -dict [ list \
+CONFIG.ENABLE_ADVANCED_OPTIONS {1} \
+CONFIG.NUM_MI {3} \
+CONFIG.NUM_SI {2} \
+CONFIG.S00_HAS_DATA_FIFO {2} \
+CONFIG.S01_HAS_DATA_FIFO {2} \
+CONFIG.STRATEGY {2} \
+ ] $axi_mem_intercon
+
+  # Create instance: axi_pcie_0, and set properties
+  set axi_pcie_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_pcie:2.8 axi_pcie_0 ]
+  set_property -dict [ list \
+CONFIG.AXIBAR_AS_0 {false} \
+CONFIG.AXIBAR_AS_1 {true} \
+CONFIG.AXIBAR_NUM {1} \
+CONFIG.BAR0_SCALE {Megabytes} \
+CONFIG.BAR0_SIZE {8} \
+CONFIG.BAR1_ENABLED {true} \
+CONFIG.BAR1_SCALE {Kilobytes} \
+CONFIG.BAR1_SIZE {128} \
+CONFIG.BAR1_TYPE {Memory} \
+CONFIG.BAR2_ENABLED {true} \
+CONFIG.BAR2_SCALE {Kilobytes} \
+CONFIG.BAR2_SIZE {64} \
+CONFIG.BAR2_TYPE {Memory} \
+CONFIG.BAR_64BIT {true} \
+CONFIG.DEVICE_ID {0x7021} \
+CONFIG.MAX_LINK_SPEED {5.0_GT/s} \
+CONFIG.M_AXI_DATA_WIDTH {64} \
+CONFIG.PCIEBAR2AXIBAR_1 {0x44A00000} \
+CONFIG.PCIEBAR2AXIBAR_2 {0x40000000} \
+CONFIG.S_AXI_DATA_WIDTH {64} \
+CONFIG.S_AXI_SUPPORTS_NARROW_BURST {true} \
+CONFIG.en_transceiver_status_ports {true} \
+CONFIG.shared_logic_in_core {true} \
+ ] $axi_pcie_0
+
+  # Create instance: axi_vdma_0, and set properties
+  set axi_vdma_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_vdma:6.2 axi_vdma_0 ]
+  set_property -dict [ list \
+CONFIG.c_include_mm2s_dre {1} \
+CONFIG.c_include_s2mm {0} \
+CONFIG.c_m_axis_mm2s_tdata_width {24} \
+CONFIG.c_mm2s_genlock_mode {0} \
+CONFIG.c_mm2s_linebuffer_depth {512} \
+CONFIG.c_mm2s_max_burst_length {32} \
+CONFIG.c_num_fstores {1} \
+CONFIG.c_s2mm_genlock_mode {0} \
+CONFIG.c_s2mm_linebuffer_depth {512} \
+CONFIG.c_use_mm2s_fsync {0} \
+ ] $axi_vdma_0
+
+  # Create instance: c_counter_binary_0, and set properties
+  set c_counter_binary_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:c_counter_binary:12.0 c_counter_binary_0 ]
+  set_property -dict [ list \
+CONFIG.Output_Width {25} \
+CONFIG.SINIT {false} \
+ ] $c_counter_binary_0
+
+  # Create instance: c_shift_ram_0, and set properties
+  set c_shift_ram_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:c_shift_ram:12.0 c_shift_ram_0 ]
+  set_property -dict [ list \
+CONFIG.AsyncInitVal {0} \
+CONFIG.DefaultData {0} \
+CONFIG.Depth {4} \
+CONFIG.SyncInitVal {0} \
+CONFIG.Width {1} \
+ ] $c_shift_ram_0
+
+  # Create instance: c_shift_ram_1, and set properties
+  set c_shift_ram_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:c_shift_ram:12.0 c_shift_ram_1 ]
+  set_property -dict [ list \
+CONFIG.AsyncInitVal {000000000000000000000000000000} \
+CONFIG.DefaultData {000000000000000000000000000000} \
+CONFIG.Depth {4} \
+CONFIG.SyncInitVal {000000000000000000000000000000} \
+CONFIG.Width {30} \
+ ] $c_shift_ram_1
+
+  # Create instance: c_shift_ram_2, and set properties
+  set c_shift_ram_2 [ create_bd_cell -type ip -vlnv xilinx.com:ip:c_shift_ram:12.0 c_shift_ram_2 ]
+  set_property -dict [ list \
+CONFIG.AsyncInitVal {0} \
+CONFIG.DefaultData {0} \
+CONFIG.Depth {4} \
+CONFIG.SyncInitVal {0} \
+CONFIG.Width {1} \
+ ] $c_shift_ram_2
+
+  # Create instance: chroma_key_0, and set properties
+  set chroma_key_0 [ create_bd_cell -type ip -vlnv alphamaxmedia.com:bunnie:chroma_key:1.1 chroma_key_0 ]
+
+  # Create instance: clk_wiz_0, and set properties
+  set clk_wiz_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:5.3 clk_wiz_0 ]
+  set_property -dict [ list \
+CONFIG.CLKIN1_JITTER_PS {200.0} \
+CONFIG.CLKOUT1_JITTER {126.902} \
+CONFIG.CLKOUT1_PHASE_ERROR {164.985} \
+CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {400} \
+CONFIG.CLKOUT1_USED {true} \
+CONFIG.CLKOUT2_JITTER {142.107} \
+CONFIG.CLKOUT2_PHASE_ERROR {164.985} \
+CONFIG.CLKOUT2_REQUESTED_OUT_FREQ {200} \
+CONFIG.CLKOUT2_USED {true} \
+CONFIG.CLKOUT3_JITTER {192.113} \
+CONFIG.CLKOUT3_PHASE_ERROR {164.985} \
+CONFIG.CLKOUT3_REQUESTED_OUT_FREQ {50} \
+CONFIG.CLKOUT3_USED {true} \
+CONFIG.CLKOUT4_JITTER {236.428} \
+CONFIG.CLKOUT4_PHASE_ERROR {164.985} \
+CONFIG.CLKOUT4_REQUESTED_OUT_FREQ {25} \
+CONFIG.CLKOUT4_USED {true} \
+CONFIG.MMCM_CLKFBOUT_MULT_F {20.000} \
+CONFIG.MMCM_CLKIN1_PERIOD {20.0} \
+CONFIG.MMCM_CLKIN2_PERIOD {10.0} \
+CONFIG.MMCM_CLKOUT0_DIVIDE_F {2.500} \
+CONFIG.MMCM_CLKOUT1_DIVIDE {5} \
+CONFIG.MMCM_CLKOUT2_DIVIDE {20} \
+CONFIG.MMCM_CLKOUT3_DIVIDE {40} \
+CONFIG.MMCM_COMPENSATION {ZHOLD} \
+CONFIG.MMCM_DIVCLK_DIVIDE {1} \
+CONFIG.NUM_OUT_CLKS {4} \
+CONFIG.PRIM_IN_FREQ {50} \
+CONFIG.RESET_PORT {resetn} \
+CONFIG.RESET_TYPE {ACTIVE_LOW} \
+CONFIG.USE_LOCKED {false} \
+CONFIG.USE_RESET {false} \
+ ] $clk_wiz_0
+
+  # Need to retain value_src of defaults
+  set_property -dict [ list \
+CONFIG.MMCM_CLKIN2_PERIOD.VALUE_SRC {DEFAULT} \
+CONFIG.MMCM_COMPENSATION.VALUE_SRC {DEFAULT} \
+ ] $clk_wiz_0
+
+  # Create instance: dvi_decoder_v2_0, and set properties
+  set dvi_decoder_v2_0 [ create_bd_cell -type ip -vlnv alphamaxmedia.com:bunnie:dvi_decoder_v2:2.22 dvi_decoder_v2_0 ]
+
+  # Create instance: dvi_encoder_v2_0, and set properties
+  set dvi_encoder_v2_0 [ create_bd_cell -type ip -vlnv alphamaxmedia.com:bunnie:dvi_encoder_v2:2.4 dvi_encoder_v2_0 ]
+
+  # Create instance: hdcp_engine_0, and set properties
+  set hdcp_engine_0 [ create_bd_cell -type ip -vlnv alphamaxmedia.com:bunnie:hdcp_engine:1.1 hdcp_engine_0 ]
+
+  # Create instance: hdcp_snoop_0, and set properties
+  set hdcp_snoop_0 [ create_bd_cell -type ip -vlnv alphamaxmedia.com:bunnie:hdcp_snoop:1.4 hdcp_snoop_0 ]
+
+  # Create instance: ila_0, and set properties
+  set ila_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.1 ila_0 ]
+  set_property -dict [ list \
+CONFIG.C_ENABLE_ILA_AXI_MON {false} \
+CONFIG.C_MONITOR_TYPE {Native} \
+CONFIG.C_NUM_OF_PROBES {4} \
+CONFIG.C_PROBE0_WIDTH {8} \
+CONFIG.C_PROBE1_WIDTH {8} \
+CONFIG.C_PROBE2_WIDTH {8} \
+CONFIG.C_PROBE3_WIDTH {1} \
+ ] $ila_0
+
+  # Create instance: mig_7series_0, and set properties
+  set mig_7series_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:mig_7series:3.0 mig_7series_0 ]
+
+  # Generate the PRJ File for MIG
+  set str_mig_folder [get_property IP_DIR [ get_ips [ get_property CONFIG.Component_Name $mig_7series_0 ] ] ]
+  set str_mig_file_name mig_b.prj
+  set str_mig_file_path ${str_mig_folder}/${str_mig_file_name}
+
+  write_mig_file_overlay1_mig_7series_0_0 $str_mig_file_path
+
+  set_property -dict [ list \
+CONFIG.BOARD_MIG_PARAM {Custom} \
+CONFIG.MIG_DONT_TOUCH_PARAM {Custom} \
+CONFIG.RESET_BOARD_INTERFACE {Custom} \
+CONFIG.XML_INPUT_FILE {mig_b.prj} \
+ ] $mig_7series_0
+
+  # Create instance: proc_sys_reset_0, and set properties
+  set proc_sys_reset_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 proc_sys_reset_0 ]
+
+  # Create instance: proc_sys_reset_1, and set properties
+  set proc_sys_reset_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 proc_sys_reset_1 ]
+
+  # Create instance: proc_sys_reset_2, and set properties
+  set proc_sys_reset_2 [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 proc_sys_reset_2 ]
+
+  # Create instance: proc_sys_reset_3, and set properties
+  set proc_sys_reset_3 [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 proc_sys_reset_3 ]
+
+  # Create instance: reg_expander_0, and set properties
+  set reg_expander_0 [ create_bd_cell -type ip -vlnv alphamaxmedia.com:bunnie:reg_expander:1.3 reg_expander_0 ]
+
+  # Create instance: rst_axi_pcie_0_125M, and set properties
+  set rst_axi_pcie_0_125M [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 rst_axi_pcie_0_125M ]
+
+  # Create instance: rst_mig_7series_0_100M, and set properties
+  set rst_mig_7series_0_100M [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 rst_mig_7series_0_100M ]
+
+  # Create instance: util_ds_buf_0, and set properties
+  set util_ds_buf_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:util_ds_buf:2.1 util_ds_buf_0 ]
+  set_property -dict [ list \
+CONFIG.C_BUF_TYPE {IBUFDSGTE} \
+ ] $util_ds_buf_0
+
+  # Create instance: util_ds_buf_1, and set properties
+  set util_ds_buf_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:util_ds_buf:2.1 util_ds_buf_1 ]
+  set_property -dict [ list \
+CONFIG.C_BUF_TYPE {BUFG} \
+ ] $util_ds_buf_1
+
+  # Create instance: util_ds_buf_9, and set properties
+  set util_ds_buf_9 [ create_bd_cell -type ip -vlnv xilinx.com:ip:util_ds_buf:2.1 util_ds_buf_9 ]
+
+  # Create instance: util_ds_buf_10, and set properties
+  set util_ds_buf_10 [ create_bd_cell -type ip -vlnv xilinx.com:ip:util_ds_buf:2.1 util_ds_buf_10 ]
+  set_property -dict [ list \
+CONFIG.C_BUF_TYPE {BUFG} \
+ ] $util_ds_buf_10
+
+  # Create instance: util_vector_logic_3, and set properties
+  set util_vector_logic_3 [ create_bd_cell -type ip -vlnv xilinx.com:ip:util_vector_logic:2.0 util_vector_logic_3 ]
+  set_property -dict [ list \
+CONFIG.C_OPERATION {not} \
+CONFIG.C_SIZE {1} \
+CONFIG.LOGO_FILE {data/sym_notgate.png} \
+ ] $util_vector_logic_3
+
+  # Create instance: v_axi4s_vid_out_0, and set properties
+  set v_axi4s_vid_out_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:v_axi4s_vid_out:4.0 v_axi4s_vid_out_0 ]
+  set_property -dict [ list \
+CONFIG.C_ADDR_WIDTH {5} \
+CONFIG.C_HAS_ASYNC_CLK {0} \
+CONFIG.C_S_AXIS_VIDEO_FORMAT {2} \
+CONFIG.C_VTG_MASTER_SLAVE {1} \
+ ] $v_axi4s_vid_out_0
+
+  # Create instance: xlconcat_0, and set properties
+  set xlconcat_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 xlconcat_0 ]
+  set_property -dict [ list \
+CONFIG.IN0_WIDTH {8} \
+CONFIG.IN1_WIDTH {8} \
+CONFIG.IN2_WIDTH {16} \
+CONFIG.NUM_PORTS {3} \
+ ] $xlconcat_0
+
+  # Create instance: xlconstant_0, and set properties
+  set xlconstant_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 xlconstant_0 ]
+  set_property -dict [ list \
+CONFIG.CONST_VAL {0} \
+ ] $xlconstant_0
+
+  # Create instance: xlconstant_1, and set properties
+  set xlconstant_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 xlconstant_1 ]
+  set_property -dict [ list \
+CONFIG.CONST_VAL {839760574} \
+CONFIG.CONST_WIDTH {32} \
+ ] $xlconstant_1
+
+  # Create instance: xlconstant_3, and set properties
+  set xlconstant_3 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 xlconstant_3 ]
+  set_property -dict [ list \
+CONFIG.CONST_VAL {47806} \
+CONFIG.CONST_WIDTH {16} \
+ ] $xlconstant_3
+
+  # Create instance: xlconstant_5, and set properties
+  set xlconstant_5 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 xlconstant_5 ]
+
+  # Create instance: xlconstant_6, and set properties
+  set xlconstant_6 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 xlconstant_6 ]
+
+  # Create instance: xlconstant_7, and set properties
+  set xlconstant_7 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 xlconstant_7 ]
+  set_property -dict [ list \
+CONFIG.CONST_VAL {0} \
+ ] $xlconstant_7
+
+  # Create instance: xlconstant_8, and set properties
+  set xlconstant_8 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 xlconstant_8 ]
+  set_property -dict [ list \
+CONFIG.CONST_VAL {0} \
+ ] $xlconstant_8
+
+  # Create instance: xlslice_0, and set properties
+  set xlslice_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 xlslice_0 ]
+  set_property -dict [ list \
+CONFIG.DIN_FROM {24} \
+CONFIG.DIN_TO {24} \
+CONFIG.DIN_WIDTH {25} \
+CONFIG.DOUT_WIDTH {1} \
+ ] $xlslice_0
+
+  # Create instance: xlslice_1, and set properties
+  set xlslice_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 xlslice_1 ]
+  set_property -dict [ list \
+CONFIG.DIN_FROM {7} \
+CONFIG.DIN_TO {0} \
+CONFIG.DIN_WIDTH {24} \
+CONFIG.DOUT_WIDTH {8} \
+ ] $xlslice_1
+
+  # Create instance: xlslice_2, and set properties
+  set xlslice_2 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 xlslice_2 ]
+  set_property -dict [ list \
+CONFIG.DIN_FROM {15} \
+CONFIG.DIN_TO {8} \
+CONFIG.DIN_WIDTH {24} \
+CONFIG.DOUT_WIDTH {8} \
+ ] $xlslice_2
+
+  # Create instance: xlslice_3, and set properties
+  set xlslice_3 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 xlslice_3 ]
+  set_property -dict [ list \
+CONFIG.DIN_FROM {23} \
+CONFIG.DIN_TO {16} \
+CONFIG.DIN_WIDTH {24} \
+CONFIG.DOUT_WIDTH {8} \
+ ] $xlslice_3
+
+  # Create instance: xlslice_4, and set properties
+  set xlslice_4 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 xlslice_4 ]
+
+  # Create instance: xlslice_5, and set properties
+  set xlslice_5 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 xlslice_5 ]
+  set_property -dict [ list \
+CONFIG.DIN_FROM {4} \
+CONFIG.DOUT_WIDTH {5} \
+ ] $xlslice_5
+
+  # Create instance: xlslice_6, and set properties
+  set xlslice_6 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 xlslice_6 ]
+  set_property -dict [ list \
+CONFIG.DIN_FROM {15} \
+CONFIG.DIN_TO {8} \
+CONFIG.DOUT_WIDTH {8} \
+ ] $xlslice_6
+
+  # Create instance: xlslice_7, and set properties
+  set xlslice_7 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 xlslice_7 ]
+  set_property -dict [ list \
+CONFIG.DIN_FROM {31} \
+CONFIG.DIN_TO {31} \
+CONFIG.DOUT_WIDTH {1} \
+ ] $xlslice_7
+
+  # Create instance: xlslice_8, and set properties
+  set xlslice_8 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 xlslice_8 ]
+  set_property -dict [ list \
+CONFIG.DIN_FROM {8} \
+CONFIG.DIN_TO {8} \
+CONFIG.DOUT_WIDTH {1} \
+ ] $xlslice_8
+
+  # Create instance: xlslice_11, and set properties
+  set xlslice_11 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 xlslice_11 ]
+  set_property -dict [ list \
+CONFIG.DIN_FROM {0} \
+CONFIG.DIN_TO {0} \
+CONFIG.DIN_WIDTH {8} \
+ ] $xlslice_11
+
+  # Create instance: xlslice_12, and set properties
+  set xlslice_12 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 xlslice_12 ]
+  set_property -dict [ list \
+CONFIG.DIN_FROM {26} \
+CONFIG.DIN_TO {24} \
+CONFIG.DOUT_WIDTH {3} \
+ ] $xlslice_12
+
+  # Create instance: xlslice_13, and set properties
+  set xlslice_13 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 xlslice_13 ]
+  set_property -dict [ list \
+CONFIG.DIN_FROM {23} \
+CONFIG.DIN_TO {16} \
+CONFIG.DOUT_WIDTH {8} \
+ ] $xlslice_13
+
+  # Create instance: xlslice_14, and set properties
+  set xlslice_14 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 xlslice_14 ]
+  set_property -dict [ list \
+CONFIG.DIN_FROM {31} \
+CONFIG.DIN_TO {31} \
+CONFIG.DOUT_WIDTH {1} \
+ ] $xlslice_14
+
+  # Create instance: xlslice_27, and set properties
+  set xlslice_27 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 xlslice_27 ]
+  set_property -dict [ list \
+CONFIG.DIN_FROM {1} \
+CONFIG.DIN_TO {1} \
+CONFIG.DOUT_WIDTH {1} \
+ ] $xlslice_27
+
+  # Create interface connections
+  connect_bd_intf_net -intf_net axi_mem_intercon_M00_AXI [get_bd_intf_pins axi_mem_intercon/M00_AXI] [get_bd_intf_pins mig_7series_0/S_AXI]
+  connect_bd_intf_net -intf_net axi_mem_intercon_M01_AXI [get_bd_intf_pins axi_mem_intercon/M01_AXI] [get_bd_intf_pins axi_vdma_0/S_AXI_LITE]
+  connect_bd_intf_net -intf_net axi_mem_intercon_M02_AXI [get_bd_intf_pins axi_gpio_0/S_AXI] [get_bd_intf_pins axi_mem_intercon/M02_AXI]
+  connect_bd_intf_net -intf_net axi_pcie_0_M_AXI [get_bd_intf_pins axi_mem_intercon/S00_AXI] [get_bd_intf_pins axi_pcie_0/M_AXI]
+  connect_bd_intf_net -intf_net axi_vdma_0_M_AXIS_MM2S [get_bd_intf_pins axi_vdma_0/M_AXIS_MM2S] [get_bd_intf_pins v_axi4s_vid_out_0/video_in]
+  connect_bd_intf_net -intf_net axi_vdma_0_M_AXI_MM2S [get_bd_intf_pins axi_mem_intercon/S01_AXI] [get_bd_intf_pins axi_vdma_0/M_AXI_MM2S]
+
+  # Create port connections
+  connect_bd_net -net HDMI_RX_0_N_1 [get_bd_ports HDMI_RX_0_N] [get_bd_pins dvi_decoder_v2_0/blue_n]
+  connect_bd_net -net HDMI_RX_0_P_1 [get_bd_ports HDMI_RX_0_P] [get_bd_pins dvi_decoder_v2_0/blue_p]
+  connect_bd_net -net HDMI_RX_1_N_1 [get_bd_ports HDMI_RX_1_N] [get_bd_pins dvi_decoder_v2_0/green_n]
+  connect_bd_net -net HDMI_RX_1_P_1 [get_bd_ports HDMI_RX_1_P] [get_bd_pins dvi_decoder_v2_0/green_p]
+  connect_bd_net -net HDMI_RX_2_N_1 [get_bd_ports HDMI_RX_2_N] [get_bd_pins dvi_decoder_v2_0/red_n]
+  connect_bd_net -net HDMI_RX_2_P_1 [get_bd_ports HDMI_RX_2_P] [get_bd_pins dvi_decoder_v2_0/red_p]
+  connect_bd_net -net HDMI_RX_CLK_N_1 [get_bd_ports HDMI_RX_CLK_N] [get_bd_pins util_ds_buf_9/IBUF_DS_N]
+  connect_bd_net -net HDMI_RX_CLK_P_1 [get_bd_ports HDMI_RX_CLK_P] [get_bd_pins util_ds_buf_9/IBUF_DS_P]
+  connect_bd_net -net HPD_1 [get_bd_ports HPD] [get_bd_pins hdcp_engine_0/hpd]
+  connect_bd_net -net LV_SCL_1 [get_bd_ports LV_SCL] [get_bd_pins hdcp_snoop_0/SCL]
+  connect_bd_net -net LV_SDA_1 [get_bd_ports LV_SDA] [get_bd_pins hdcp_snoop_0/SDA]
+  connect_bd_net -net Net [get_bd_ports ddr3_dqs_n] [get_bd_pins mig_7series_0/ddr3_dqs_n]
+  connect_bd_net -net Net1 [get_bd_ports ddr3_dq] [get_bd_pins mig_7series_0/ddr3_dq]
+  connect_bd_net -net Net2 [get_bd_ports ddr3_dqs_p] [get_bd_pins mig_7series_0/ddr3_dqs_p]
+  connect_bd_net -net Net3 [get_bd_ports PERST_N] [get_bd_pins proc_sys_reset_0/ext_reset_in] [get_bd_pins proc_sys_reset_1/ext_reset_in] [get_bd_pins proc_sys_reset_2/ext_reset_in] [get_bd_pins proc_sys_reset_3/ext_reset_in] [get_bd_pins rst_axi_pcie_0_125M/ext_reset_in]
+  connect_bd_net -net Net4 [get_bd_pins v_axi4s_vid_out_0/vid_data] [get_bd_pins xlslice_1/Din] [get_bd_pins xlslice_2/Din] [get_bd_pins xlslice_3/Din]
+  connect_bd_net -net PCI_CLK_N_1 [get_bd_ports PCI_CLK_N] [get_bd_pins util_ds_buf_0/IBUF_DS_N]
+  connect_bd_net -net PCI_CLK_P_1 [get_bd_ports PCI_CLK_P] [get_bd_pins util_ds_buf_0/IBUF_DS_P]
+  connect_bd_net -net PCI_RX_N_1 [get_bd_ports PCI_RX_N] [get_bd_pins axi_pcie_0/pci_exp_rxn]
+  connect_bd_net -net PCI_RX_P_1 [get_bd_ports PCI_RX_P] [get_bd_pins axi_pcie_0/pci_exp_rxp]
+  connect_bd_net -net SYSCLK_LV_1 [get_bd_ports SYSCLK] [get_bd_pins util_ds_buf_1/BUFG_I]
+  connect_bd_net -net axi_gpio_0_gpio2_io_o [get_bd_pins axi_gpio_0/gpio2_io_o] [get_bd_pins xlslice_5/Din] [get_bd_pins xlslice_6/Din] [get_bd_pins xlslice_7/Din]
+  connect_bd_net -net axi_gpio_0_gpio_io_o [get_bd_pins axi_gpio_0/gpio_io_o] [get_bd_pins xlslice_12/Din] [get_bd_pins xlslice_13/Din] [get_bd_pins xlslice_14/Din] [get_bd_pins xlslice_27/Din] [get_bd_pins xlslice_4/Din] [get_bd_pins xlslice_8/Din]
+  connect_bd_net -net axi_pcie_0_axi_aclk_out [get_bd_pins axi_gpio_0/s_axi_aclk] [get_bd_pins axi_mem_intercon/ACLK] [get_bd_pins axi_mem_intercon/M02_ACLK] [get_bd_pins axi_mem_intercon/S00_ACLK] [get_bd_pins axi_pcie_0/axi_aclk_out] [get_bd_pins reg_expander_0/wr_clk] [get_bd_pins rst_axi_pcie_0_125M/slowest_sync_clk]
+  connect_bd_net -net axi_pcie_0_pci_exp_txn [get_bd_ports PCI_TX_N] [get_bd_pins axi_pcie_0/pci_exp_txn]
+  connect_bd_net -net axi_pcie_0_pci_exp_txp [get_bd_ports PCI_TX_P] [get_bd_pins axi_pcie_0/pci_exp_txp]
+  connect_bd_net -net c_counter_binary_0_Q [get_bd_pins c_counter_binary_0/Q] [get_bd_pins xlslice_0/Din]
+  connect_bd_net -net c_shift_ram_0_Q [get_bd_pins c_shift_ram_0/Q] [get_bd_pins dvi_encoder_v2_0/bypass_video_only]
+  connect_bd_net -net c_shift_ram_1_Q [get_bd_pins c_shift_ram_1/Q] [get_bd_pins dvi_encoder_v2_0/bypass_sdata]
+  connect_bd_net -net c_shift_ram_2_Q [get_bd_pins c_shift_ram_2/Q] [get_bd_pins dvi_encoder_v2_0/bypass_ena]
+  connect_bd_net -net chroma_key_0_blue_blend [get_bd_pins chroma_key_0/blue_blend] [get_bd_pins dvi_encoder_v2_0/blue_din]
+  connect_bd_net -net chroma_key_0_blue_di_pipe [get_bd_pins chroma_key_0/blue_di_pipe] [get_bd_pins dvi_encoder_v2_0/blue_di]
+  connect_bd_net -net chroma_key_0_ctl_code_pipe [get_bd_pins chroma_key_0/ctl_code_pipe] [get_bd_pins dvi_encoder_v2_0/ctl_code]
+  connect_bd_net -net chroma_key_0_dat_ena_pipe [get_bd_pins chroma_key_0/dat_ena_pipe] [get_bd_pins dvi_encoder_v2_0/dat_ena]
+  connect_bd_net -net chroma_key_0_dat_gb_pipe [get_bd_pins chroma_key_0/dat_gb_pipe] [get_bd_pins dvi_encoder_v2_0/dat_gb]
+  connect_bd_net -net chroma_key_0_de_pipe [get_bd_pins chroma_key_0/de_pipe] [get_bd_pins dvi_encoder_v2_0/de]
+  connect_bd_net -net chroma_key_0_green_blend [get_bd_pins chroma_key_0/green_blend] [get_bd_pins dvi_encoder_v2_0/green_din]
+  connect_bd_net -net chroma_key_0_green_di_pipe [get_bd_pins chroma_key_0/green_di_pipe] [get_bd_pins dvi_encoder_v2_0/green_di]
+  connect_bd_net -net chroma_key_0_hsync_pipe [get_bd_pins chroma_key_0/hsync_pipe] [get_bd_pins dvi_encoder_v2_0/hsync]
+  connect_bd_net -net chroma_key_0_red_blend [get_bd_pins chroma_key_0/red_blend] [get_bd_pins dvi_encoder_v2_0/red_din]
+  connect_bd_net -net chroma_key_0_red_di_pipe [get_bd_pins chroma_key_0/red_di_pipe] [get_bd_pins dvi_encoder_v2_0/red_di]
+  connect_bd_net -net chroma_key_0_vid_gb_pipe [get_bd_pins chroma_key_0/vid_gb_pipe] [get_bd_pins dvi_encoder_v2_0/vid_gb]
+  connect_bd_net -net chroma_key_0_vsync_pipe [get_bd_pins chroma_key_0/vsync_pipe] [get_bd_pins dvi_encoder_v2_0/vsync]
+  connect_bd_net -net clk_wiz_0_clk_out1 [get_bd_pins clk_wiz_0/clk_out1] [get_bd_pins mig_7series_0/sys_clk_i] [get_bd_pins proc_sys_reset_3/slowest_sync_clk]
+  connect_bd_net -net clk_wiz_0_clk_out2 [get_bd_pins clk_wiz_0/clk_out2] [get_bd_pins dvi_decoder_v2_0/mhz200_clk] [get_bd_pins mig_7series_0/clk_ref_i]
+  connect_bd_net -net clk_wiz_0_clk_out3 [get_bd_pins c_counter_binary_0/CLK] [get_bd_pins clk_wiz_0/clk_out3]
+  connect_bd_net -net clk_wiz_0_clk_out4 [get_bd_pins clk_wiz_0/clk_out4] [get_bd_pins hdcp_snoop_0/clk] [get_bd_pins proc_sys_reset_2/slowest_sync_clk]
+  connect_bd_net -net dvi_decoder_v2_0_blue [get_bd_pins chroma_key_0/blue_video] [get_bd_pins dvi_decoder_v2_0/blue]
+  connect_bd_net -net dvi_decoder_v2_0_blue_di [get_bd_pins chroma_key_0/blue_di] [get_bd_pins dvi_decoder_v2_0/blue_di]
+  connect_bd_net -net dvi_decoder_v2_0_ctl_code [get_bd_pins chroma_key_0/ctl_code] [get_bd_pins dvi_decoder_v2_0/ctl_code] [get_bd_pins hdcp_engine_0/ctl_code]
+  connect_bd_net -net dvi_decoder_v2_0_cv [get_bd_pins dvi_decoder_v2_0/cv] [get_bd_pins hdcp_engine_0/cv]
+  connect_bd_net -net dvi_decoder_v2_0_data_gb [get_bd_pins chroma_key_0/dat_gb] [get_bd_pins dvi_decoder_v2_0/data_gb]
+  connect_bd_net -net dvi_decoder_v2_0_de [get_bd_pins chroma_key_0/de] [get_bd_pins dvi_decoder_v2_0/de] [get_bd_pins hdcp_engine_0/de] [get_bd_pins util_vector_logic_3/Op1] [get_bd_pins v_axi4s_vid_out_0/vtg_active_video]
+  connect_bd_net -net dvi_decoder_v2_0_encoding [get_bd_pins chroma_key_0/dat_ena] [get_bd_pins dvi_decoder_v2_0/encoding]
+  connect_bd_net -net dvi_decoder_v2_0_green [get_bd_pins chroma_key_0/green_video] [get_bd_pins dvi_decoder_v2_0/green]
+  connect_bd_net -net dvi_decoder_v2_0_green_di [get_bd_pins chroma_key_0/green_di] [get_bd_pins dvi_decoder_v2_0/green_di]
+  connect_bd_net -net dvi_decoder_v2_0_hdcp_ena [get_bd_pins dvi_decoder_v2_0/hdcp_ena] [get_bd_pins hdcp_engine_0/hdcp_ena]
+  connect_bd_net -net dvi_decoder_v2_0_hsync [get_bd_pins chroma_key_0/hsync] [get_bd_pins dvi_decoder_v2_0/hsync] [get_bd_pins hdcp_engine_0/hsync] [get_bd_pins v_axi4s_vid_out_0/vtg_hsync]
+  connect_bd_net -net dvi_decoder_v2_0_line_end [get_bd_pins dvi_decoder_v2_0/line_end] [get_bd_pins hdcp_engine_0/line_end]
+  connect_bd_net -net dvi_decoder_v2_0_p_clk [get_bd_pins axi_mem_intercon/M01_ACLK] [get_bd_pins axi_mem_intercon/S01_ACLK] [get_bd_pins axi_vdma_0/m_axi_mm2s_aclk] [get_bd_pins axi_vdma_0/m_axis_mm2s_aclk] [get_bd_pins axi_vdma_0/s_axi_lite_aclk] [get_bd_pins c_shift_ram_0/CLK] [get_bd_pins c_shift_ram_1/CLK] [get_bd_pins c_shift_ram_2/CLK] [get_bd_pins chroma_key_0/clk] [get_bd_pins dvi_decoder_v2_0/p_clk] [get_bd_pins dvi_encoder_v2_0/p_clk] [get_bd_pins hdcp_engine_0/clk] [get_bd_pins ila_0/clk] [get_bd_pins proc_sys_reset_1/slowest_sync_clk] [get_bd_pins reg_expander_0/rd_clk] [get_bd_pins v_axi4s_vid_out_0/aclk]
+  connect_bd_net -net dvi_decoder_v2_0_px5_clk [get_bd_pins dvi_decoder_v2_0/px5_clk] [get_bd_pins dvi_encoder_v2_0/px5_clk]
+  connect_bd_net -net dvi_decoder_v2_0_red [get_bd_pins chroma_key_0/red_video] [get_bd_pins dvi_decoder_v2_0/red]
+  connect_bd_net -net dvi_decoder_v2_0_red_di [get_bd_pins chroma_key_0/red_di] [get_bd_pins dvi_decoder_v2_0/red_di]
+  connect_bd_net -net dvi_decoder_v2_0_reset [get_bd_pins dvi_decoder_v2_0/reset] [get_bd_pins dvi_encoder_v2_0/reset]
+  connect_bd_net -net dvi_decoder_v2_0_sdout [get_bd_pins c_shift_ram_1/D] [get_bd_pins dvi_decoder_v2_0/sdout]
+  connect_bd_net -net dvi_decoder_v2_0_video_gb [get_bd_pins chroma_key_0/vid_gb] [get_bd_pins dvi_decoder_v2_0/video_gb]
+  connect_bd_net -net dvi_decoder_v2_0_vsync [get_bd_pins chroma_key_0/vsync] [get_bd_pins dvi_decoder_v2_0/vsync] [get_bd_pins hdcp_engine_0/vsync] [get_bd_pins v_axi4s_vid_out_0/vtg_vblank] [get_bd_pins v_axi4s_vid_out_0/vtg_vsync]
+  connect_bd_net -net dvi_encoder_v2_0_TMDS_0_N [get_bd_ports HDMI_TX_0_N] [get_bd_pins dvi_encoder_v2_0/TMDS_0_N]
+  connect_bd_net -net dvi_encoder_v2_0_TMDS_0_P [get_bd_ports HDMI_TX_0_P] [get_bd_pins dvi_encoder_v2_0/TMDS_0_P]
+  connect_bd_net -net dvi_encoder_v2_0_TMDS_1_N [get_bd_ports HDMI_TX_1_N] [get_bd_pins dvi_encoder_v2_0/TMDS_1_N]
+  connect_bd_net -net dvi_encoder_v2_0_TMDS_1_P [get_bd_ports HDMI_TX_1_P] [get_bd_pins dvi_encoder_v2_0/TMDS_1_P]
+  connect_bd_net -net dvi_encoder_v2_0_TMDS_2_N [get_bd_ports HDMI_TX_2_N] [get_bd_pins dvi_encoder_v2_0/TMDS_2_N]
+  connect_bd_net -net dvi_encoder_v2_0_TMDS_2_P [get_bd_ports HDMI_TX_2_P] [get_bd_pins dvi_encoder_v2_0/TMDS_2_P]
+  connect_bd_net -net dvi_encoder_v2_0_TMDS_CLK_N [get_bd_ports HDMI_TX_CLK_N] [get_bd_pins dvi_encoder_v2_0/TMDS_CLK_N]
+  connect_bd_net -net dvi_encoder_v2_0_TMDS_CLK_P [get_bd_ports HDMI_TX_CLK_P] [get_bd_pins dvi_encoder_v2_0/TMDS_CLK_P]
+  connect_bd_net -net hdcp_engine_0_cipher_stream [get_bd_pins chroma_key_0/cipher_stream] [get_bd_pins hdcp_engine_0/cipher_stream]
+  connect_bd_net -net hdcp_snoop_0_Aksv14_write [get_bd_pins hdcp_engine_0/An_rdy] [get_bd_pins hdcp_snoop_0/Aksv14_write]
+  connect_bd_net -net hdcp_snoop_0_An [get_bd_pins hdcp_engine_0/An] [get_bd_pins hdcp_snoop_0/An]
+  connect_bd_net -net hdcp_snoop_0_reg_dout [get_bd_pins hdcp_snoop_0/reg_dout] [get_bd_pins xlconcat_0/In1]
+  connect_bd_net -net mig_7series_0_ddr3_addr [get_bd_ports ddr3_a] [get_bd_pins mig_7series_0/ddr3_addr]
+  connect_bd_net -net mig_7series_0_ddr3_ba [get_bd_ports ddr3_ba] [get_bd_pins mig_7series_0/ddr3_ba]
+  connect_bd_net -net mig_7series_0_ddr3_cas_n [get_bd_ports ddr3_cas_n] [get_bd_pins mig_7series_0/ddr3_cas_n]
+  connect_bd_net -net mig_7series_0_ddr3_ck_n [get_bd_ports ddr3_ck_n] [get_bd_pins mig_7series_0/ddr3_ck_n]
+  connect_bd_net -net mig_7series_0_ddr3_ck_p [get_bd_ports ddr3_ck_p] [get_bd_pins mig_7series_0/ddr3_ck_p]
+  connect_bd_net -net mig_7series_0_ddr3_cke [get_bd_ports ddr3_cke] [get_bd_pins mig_7series_0/ddr3_cke]
+  connect_bd_net -net mig_7series_0_ddr3_cs_n [get_bd_ports ddr3_cs_n] [get_bd_pins mig_7series_0/ddr3_cs_n]
+  connect_bd_net -net mig_7series_0_ddr3_dm [get_bd_ports ddr3_dm] [get_bd_pins mig_7series_0/ddr3_dm]
+  connect_bd_net -net mig_7series_0_ddr3_odt [get_bd_ports ddr3_odt] [get_bd_pins mig_7series_0/ddr3_odt]
+  connect_bd_net -net mig_7series_0_ddr3_ras_n [get_bd_ports ddr3_ras_n] [get_bd_pins mig_7series_0/ddr3_ras_n]
+  connect_bd_net -net mig_7series_0_ddr3_reset_n [get_bd_ports ddr3_reset_n] [get_bd_pins mig_7series_0/ddr3_reset_n]
+  connect_bd_net -net mig_7series_0_ddr3_we_n [get_bd_ports ddr3_we_n] [get_bd_pins mig_7series_0/ddr3_we_n]
+  connect_bd_net -net mig_7series_0_mmcm_locked [get_bd_pins mig_7series_0/mmcm_locked] [get_bd_pins rst_mig_7series_0_100M/dcm_locked]
+  connect_bd_net -net mig_7series_0_ui_clk [get_bd_pins axi_mem_intercon/M00_ACLK] [get_bd_pins mig_7series_0/ui_clk] [get_bd_pins rst_mig_7series_0_100M/slowest_sync_clk]
+  connect_bd_net -net mig_7series_0_ui_clk_sync_rst [get_bd_pins mig_7series_0/ui_clk_sync_rst] [get_bd_pins rst_mig_7series_0_100M/ext_reset_in]
+  connect_bd_net -net proc_sys_reset_0_peripheral_reset [get_bd_pins dvi_decoder_v2_0/ex_reset] [get_bd_pins proc_sys_reset_0/peripheral_reset]
+  connect_bd_net -net proc_sys_reset_1_interconnect_aresetn [get_bd_pins proc_sys_reset_1/interconnect_aresetn] [get_bd_pins v_axi4s_vid_out_0/aresetn]
+  connect_bd_net -net proc_sys_reset_1_peripheral_aresetn [get_bd_pins axi_mem_intercon/M01_ARESETN] [get_bd_pins axi_mem_intercon/S01_ARESETN] [get_bd_pins axi_vdma_0/axi_resetn] [get_bd_pins proc_sys_reset_1/peripheral_aresetn]
+  connect_bd_net -net proc_sys_reset_1_peripheral_reset [get_bd_pins hdcp_engine_0/reset] [get_bd_pins proc_sys_reset_1/peripheral_reset]
+  connect_bd_net -net proc_sys_reset_2_peripheral_reset [get_bd_pins hdcp_snoop_0/reset] [get_bd_pins proc_sys_reset_2/peripheral_reset]
+  connect_bd_net -net proc_sys_reset_3_peripheral_aresetn [get_bd_pins mig_7series_0/sys_rst] [get_bd_pins proc_sys_reset_3/peripheral_aresetn]
+  connect_bd_net -net reg_expander_0_bank0 [get_bd_pins hdcp_engine_0/Km] [get_bd_pins reg_expander_0/bank0]
+  connect_bd_net -net reg_expander_0_bank1 [get_bd_pins reg_expander_0/bank1] [get_bd_pins xlslice_11/Din]
+  connect_bd_net -net rst_axi_pcie_0_125M_interconnect_aresetn [get_bd_pins axi_mem_intercon/ARESETN] [get_bd_pins axi_pcie_0/axi_aresetn] [get_bd_pins rst_axi_pcie_0_125M/interconnect_aresetn]
+  connect_bd_net -net rst_axi_pcie_0_125M_peripheral_aresetn [get_bd_pins axi_gpio_0/s_axi_aresetn] [get_bd_pins axi_mem_intercon/M02_ARESETN] [get_bd_pins axi_mem_intercon/S00_ARESETN] [get_bd_pins rst_axi_pcie_0_125M/peripheral_aresetn]
+  connect_bd_net -net rst_axi_pcie_0_125M_peripheral_reset [get_bd_pins reg_expander_0/reset] [get_bd_pins rst_axi_pcie_0_125M/peripheral_reset]
+  connect_bd_net -net rst_mig_7series_0_100M_peripheral_aresetn [get_bd_pins axi_mem_intercon/M00_ARESETN] [get_bd_pins mig_7series_0/aresetn] [get_bd_pins rst_mig_7series_0_100M/peripheral_aresetn]
+  connect_bd_net -net util_ds_buf_0_IBUF_OUT [get_bd_pins axi_pcie_0/REFCLK] [get_bd_pins util_ds_buf_0/IBUF_OUT]
+  connect_bd_net -net util_ds_buf_10_BUFG_O [get_bd_pins dvi_decoder_v2_0/rx_clk] [get_bd_pins proc_sys_reset_0/slowest_sync_clk] [get_bd_pins util_ds_buf_10/BUFG_O]
+  connect_bd_net -net util_ds_buf_1_BUFG_O [get_bd_pins clk_wiz_0/clk_in1] [get_bd_pins util_ds_buf_1/BUFG_O]
+  connect_bd_net -net util_ds_buf_9_IBUF_OUT [get_bd_pins util_ds_buf_10/BUFG_I] [get_bd_pins util_ds_buf_9/IBUF_OUT]
+  connect_bd_net -net v_tc_0_hblank_out [get_bd_pins util_vector_logic_3/Res] [get_bd_pins v_axi4s_vid_out_0/vtg_hblank]
+  connect_bd_net -net xlconcat_0_dout [get_bd_pins axi_gpio_0/gpio2_io_i] [get_bd_pins xlconcat_0/dout]
+  connect_bd_net -net xlconstant_0_dout [get_bd_pins axi_pcie_0/INTX_MSI_Request] [get_bd_pins xlconstant_0/dout]
+  connect_bd_net -net xlconstant_1_dout [get_bd_pins axi_gpio_0/gpio_io_i] [get_bd_pins xlconstant_1/dout]
+  connect_bd_net -net xlconstant_3_dout [get_bd_pins xlconcat_0/In2] [get_bd_pins xlconstant_3/dout]
+  connect_bd_net -net xlconstant_5_dout [get_bd_pins v_axi4s_vid_out_0/aclken] [get_bd_pins xlconstant_5/dout]
+  connect_bd_net -net xlconstant_6_dout [get_bd_pins v_axi4s_vid_out_0/vid_io_out_ce] [get_bd_pins xlconstant_6/dout]
+  connect_bd_net -net xlconstant_7_dout [get_bd_pins v_axi4s_vid_out_0/vtg_field_id] [get_bd_pins xlconstant_7/dout]
+  connect_bd_net -net xlconstant_8_dout [get_bd_pins axi_pcie_0/s_axi_arvalid] [get_bd_pins axi_pcie_0/s_axi_awvalid] [get_bd_pins axi_pcie_0/s_axi_bready] [get_bd_pins axi_pcie_0/s_axi_ctl_arvalid] [get_bd_pins axi_pcie_0/s_axi_ctl_awvalid] [get_bd_pins axi_pcie_0/s_axi_ctl_bready] [get_bd_pins axi_pcie_0/s_axi_ctl_rready] [get_bd_pins axi_pcie_0/s_axi_ctl_wvalid] [get_bd_pins axi_pcie_0/s_axi_rready] [get_bd_pins axi_pcie_0/s_axi_wlast] [get_bd_pins axi_pcie_0/s_axi_wvalid] [get_bd_pins xlconstant_8/dout]
+  connect_bd_net -net xlslice_0_Dout [get_bd_ports BLINKENLIGHT] [get_bd_pins xlslice_0/Dout]
+  connect_bd_net -net xlslice_11_Dout [get_bd_pins hdcp_engine_0/Km_rdy] [get_bd_pins xlslice_11/Dout]
+  connect_bd_net -net xlslice_12_Dout [get_bd_pins reg_expander_0/wr_addr] [get_bd_pins xlslice_12/Dout]
+  connect_bd_net -net xlslice_13_Dout [get_bd_pins reg_expander_0/wr_data] [get_bd_pins xlslice_13/Dout]
+  connect_bd_net -net xlslice_14_Dout [get_bd_pins reg_expander_0/we] [get_bd_pins xlslice_14/Dout]
+  connect_bd_net -net xlslice_1_Dout [get_bd_pins chroma_key_0/blue_comp] [get_bd_pins ila_0/probe0] [get_bd_pins xlslice_1/Dout]
+  connect_bd_net -net xlslice_27_Dout [get_bd_pins c_shift_ram_0/D] [get_bd_pins xlslice_27/Dout]
+  connect_bd_net -net xlslice_2_Dout [get_bd_pins chroma_key_0/green_comp] [get_bd_pins ila_0/probe1] [get_bd_pins xlslice_2/Dout]
+  connect_bd_net -net xlslice_3_Dout [get_bd_pins chroma_key_0/red_comp] [get_bd_pins ila_0/probe2] [get_bd_pins xlslice_3/Dout]
+  connect_bd_net -net xlslice_4_Dout [get_bd_pins c_shift_ram_2/D] [get_bd_pins xlslice_4/Dout]
+  connect_bd_net -net xlslice_5_Dout [get_bd_pins hdcp_snoop_0/reg_addr] [get_bd_pins xlslice_5/Dout]
+  connect_bd_net -net xlslice_6_Dout [get_bd_pins xlconcat_0/In0] [get_bd_pins xlslice_6/Dout]
+  connect_bd_net -net xlslice_7_Dout [get_bd_ports HPD_OVER] [get_bd_pins xlslice_7/Dout]
+  connect_bd_net -net xlslice_8_Dout [get_bd_pins chroma_key_0/chroma_en] [get_bd_pins ila_0/probe3] [get_bd_pins xlslice_8/Dout]
+
+  # Create address segments
+  create_bd_addr_seg -range 0x00010000 -offset 0x40000000 [get_bd_addr_spaces axi_pcie_0/M_AXI] [get_bd_addr_segs axi_gpio_0/S_AXI/Reg] SEG_axi_gpio_0_Reg
+  create_bd_addr_seg -range 0x00020000 -offset 0x44A00000 [get_bd_addr_spaces axi_pcie_0/M_AXI] [get_bd_addr_segs axi_vdma_0/S_AXI_LITE/Reg] SEG_axi_vdma_0_Reg
+  create_bd_addr_seg -range 0x20000000 -offset 0x00000000 [get_bd_addr_spaces axi_pcie_0/M_AXI] [get_bd_addr_segs mig_7series_0/memmap/memaddr] SEG_mig_7series_0_memaddr
+  create_bd_addr_seg -range 0x20000000 -offset 0x00000000 [get_bd_addr_spaces axi_vdma_0/Data_MM2S] [get_bd_addr_segs mig_7series_0/memmap/memaddr] SEG_mig_7series_0_memaddr
+
+  # Exclude Address Segments
+  create_bd_addr_seg -range 0x00010000 -offset 0x40000000 [get_bd_addr_spaces axi_vdma_0/Data_MM2S] [get_bd_addr_segs axi_gpio_0/S_AXI/Reg] SEG_axi_gpio_0_Reg
+  exclude_bd_addr_seg [get_bd_addr_segs axi_vdma_0/Data_MM2S/SEG_axi_gpio_0_Reg]
+
+  create_bd_addr_seg -range 0x00010000 -offset 0x44A00000 [get_bd_addr_spaces axi_vdma_0/Data_MM2S] [get_bd_addr_segs axi_vdma_0/S_AXI_LITE/Reg] SEG_axi_vdma_0_Reg
+  exclude_bd_addr_seg [get_bd_addr_segs axi_vdma_0/Data_MM2S/SEG_axi_vdma_0_Reg]
+
+
+  # Perform GUI Layout
+  regenerate_bd_layout -layout_string {
+   guistr: "# # String gsaved with Nlview 6.5.12  2016-01-29 bk=1.3547 VDI=39 GEI=35 GUI=JA:1.6
+#  -string -flagsOSRD
+preplace port ddr3_cas_n -pg 1 -y 1510 -defaultsOSRD
+preplace port HPD -pg 1 -y 780 -defaultsOSRD
+preplace port PCI_CLK_N -pg 1 -y 1760 -defaultsOSRD
+preplace port ddr3_we_n -pg 1 -y 1530 -defaultsOSRD
+preplace port PCI_CLK_P -pg 1 -lvl 5:-130 -defaultsOSRD -bot
+preplace port ddr3_reset_n -pg 1 -y 1550 -defaultsOSRD
+preplace port HDMI_RX_0_N -pg 1 -y 350 -defaultsOSRD
+preplace port LV_SCL -pg 1 -y 800 -defaultsOSRD
+preplace port HDMI_RX_CLK_N -pg 1 -y 520 -defaultsOSRD
+preplace port PERST_N -pg 1 -y 570 -defaultsOSRD
+preplace port HDMI_RX_0_P -pg 1 -y 330 -defaultsOSRD
+preplace port SYSCLK -pg 1 -y 1010 -defaultsOSRD
+preplace port ddr3_ras_n -pg 1 -y 1490 -defaultsOSRD
+preplace port HDMI_RX_2_N -pg 1 -y 430 -defaultsOSRD
+preplace port HDMI_RX_CLK_P -pg 1 -y 500 -defaultsOSRD
+preplace port HDMI_RX_1_N -pg 1 -y 390 -defaultsOSRD
+preplace port PCI_RX_N -pg 1 -y 1090 -defaultsOSRD
+preplace port HDMI_RX_2_P -pg 1 -y 410 -defaultsOSRD
+preplace port HDMI_RX_1_P -pg 1 -y 370 -defaultsOSRD
+preplace port PCI_RX_P -pg 1 -y 930 -defaultsOSRD
+preplace port LV_SDA -pg 1 -y 820 -defaultsOSRD
+preplace portBus HDMI_TX_1_P -pg 1 -y 320 -defaultsOSRD
+preplace portBus HDMI_TX_CLK_P -pg 1 -y 400 -defaultsOSRD
+preplace portBus ddr3_dqs_n -pg 1 -y 1430 -defaultsOSRD
+preplace portBus HDMI_TX_2_N -pg 1 -y 380 -defaultsOSRD
+preplace portBus ddr3_odt -pg 1 -y 1670 -defaultsOSRD
+preplace portBus ddr3_ck_n -pg 1 -y 1590 -defaultsOSRD
+preplace portBus ddr3_dqs_p -pg 1 -y 1410 -defaultsOSRD
+preplace portBus HDMI_TX_2_P -pg 1 -y 360 -defaultsOSRD
+preplace portBus PCI_TX_N -pg 1 -y 1270 -defaultsOSRD
+preplace portBus ddr3_ck_p -pg 1 -y 1570 -defaultsOSRD
+preplace portBus ddr3_cs_n -pg 1 -y 1630 -defaultsOSRD
+preplace portBus HPD_OVER -pg 1 -y 1120 -defaultsOSRD
+preplace portBus BLINKENLIGHT -pg 1 -y 1220 -defaultsOSRD
+preplace portBus PCI_TX_P -pg 1 -y 1370 -defaultsOSRD
+preplace portBus ddr3_dm -pg 1 -y 1650 -defaultsOSRD
+preplace portBus HDMI_TX_0_N -pg 1 -y 300 -defaultsOSRD
+preplace portBus ddr3_ba -pg 1 -y 1470 -defaultsOSRD
+preplace portBus HDMI_TX_1_N -pg 1 -y 340 -defaultsOSRD
+preplace portBus HDMI_TX_0_P -pg 1 -y 280 -defaultsOSRD
+preplace portBus ddr3_dq -pg 1 -y 1390 -defaultsOSRD
+preplace portBus ddr3_a -pg 1 -y 1450 -defaultsOSRD
+preplace portBus ddr3_cke -pg 1 -y 1610 -defaultsOSRD
+preplace portBus HDMI_TX_CLK_N -pg 1 -y 420 -defaultsOSRD
+preplace inst v_axi4s_vid_out_0 -pg 1 -lvl 7 -y 210 -defaultsOSRD
+preplace inst util_ds_buf_1 -pg 1 -lvl 2 -y 1010 -defaultsOSRD
+preplace inst axi_vdma_0 -pg 1 -lvl 6 -y 660 -defaultsOSRD
+preplace inst xlslice_0 -pg 1 -lvl 14 -y 1220 -defaultsOSRD
+preplace inst rst_mig_7series_0_100M -pg 1 -lvl 6 -y 1580 -defaultsOSRD
+preplace inst xlslice_1 -pg 1 -lvl 12 -y 150 -defaultsOSRD
+preplace inst reg_expander_0 -pg 1 -lvl 10 -y 810 -defaultsOSRD
+preplace inst xlconstant_0 -pg 1 -lvl 5 -y 1380 -defaultsOSRD
+preplace inst mig_7series_0 -pg 1 -lvl 8 -y 1560 -defaultsOSRD
+preplace inst axi_pcie_0 -pg 1 -lvl 6 -y 1250 -defaultsOSRD
+preplace inst xlslice_2 -pg 1 -lvl 12 -y 230 -defaultsOSRD
+preplace inst xlslice_27 -pg 1 -lvl 12 -y 1070 -defaultsOSRD
+preplace inst xlconstant_1 -pg 1 -lvl 8 -y 910 -defaultsOSRD
+preplace inst util_ds_buf_10 -pg 1 -lvl 2 -y 500 -defaultsOSRD
+preplace inst dvi_decoder_v2_0 -pg 1 -lvl 4 -y 390 -defaultsOSRD
+preplace inst hdcp_snoop_0 -pg 1 -lvl 11 -y 950 -defaultsOSRD
+preplace inst xlslice_3 -pg 1 -lvl 12 -y 310 -defaultsOSRD
+preplace inst chroma_key_0 -pg 1 -lvl 13 -y 350 -defaultsOSRD
+preplace inst hdcp_engine_0 -pg 1 -lvl 12 -y 700 -defaultsOSRD
+preplace inst xlconstant_3 -pg 1 -lvl 11 -y 1330 -defaultsOSRD
+preplace inst xlconcat_0 -pg 1 -lvl 12 -y 1310 -defaultsOSRD
+preplace inst xlslice_4 -pg 1 -lvl 12 -y 990 -defaultsOSRD
+preplace inst axi_gpio_0 -pg 1 -lvl 8 -y 1040 -defaultsOSRD
+preplace inst proc_sys_reset_0 -pg 1 -lvl 3 -y 520 -defaultsOSRD
+preplace inst dvi_encoder_v2_0 -pg 1 -lvl 14 -y 350 -defaultsOSRD
+preplace inst xlslice_11 -pg 1 -lvl 11 -y 770 -defaultsOSRD
+preplace inst xlslice_5 -pg 1 -lvl 10 -y 990 -defaultsOSRD
+preplace inst proc_sys_reset_1 -pg 1 -lvl 5 -y 690 -defaultsOSRD
+preplace inst c_counter_binary_0 -pg 1 -lvl 13 -y 1220 -defaultsOSRD
+preplace inst xlslice_12 -pg 1 -lvl 9 -y 870 -defaultsOSRD
+preplace inst proc_sys_reset_2 -pg 1 -lvl 10 -y 1130 -defaultsOSRD
+preplace inst xlslice_6 -pg 1 -lvl 10 -y 1290 -defaultsOSRD
+preplace inst xlconstant_5 -pg 1 -lvl 6 -y 250 -defaultsOSRD
+preplace inst ila_0 -pg 1 -lvl 13 -y 670 -defaultsOSRD
+preplace inst util_vector_logic_3 -pg 1 -lvl 6 -y 150 -defaultsOSRD
+preplace inst xlslice_13 -pg 1 -lvl 9 -y 950 -defaultsOSRD
+preplace inst proc_sys_reset_3 -pg 1 -lvl 7 -y 1490 -defaultsOSRD
+preplace inst xlslice_7 -pg 1 -lvl 14 -y 1120 -defaultsOSRD
+preplace inst xlconstant_6 -pg 1 -lvl 6 -y 330 -defaultsOSRD
+preplace inst util_ds_buf_9 -pg 1 -lvl 1 -y 500 -defaultsOSRD
+preplace inst xlslice_8 -pg 1 -lvl 12 -y 910 -defaultsOSRD
+preplace inst c_shift_ram_0 -pg 1 -lvl 13 -y 1060 -defaultsOSRD
+preplace inst xlslice_14 -pg 1 -lvl 9 -y 1030 -defaultsOSRD
+preplace inst xlconstant_7 -pg 1 -lvl 6 -y 70 -defaultsOSRD
+preplace inst c_shift_ram_1 -pg 1 -lvl 13 -y 800 -defaultsOSRD
+preplace inst xlconstant_8 -pg 1 -lvl 5 -y 1100 -defaultsOSRD
+preplace inst rst_axi_pcie_0_125M -pg 1 -lvl 5 -y 900 -defaultsOSRD
+preplace inst clk_wiz_0 -pg 1 -lvl 3 -y 1010 -defaultsOSRD
+preplace inst c_shift_ram_2 -pg 1 -lvl 13 -y 960 -defaultsOSRD
+preplace inst axi_mem_intercon -pg 1 -lvl 7 -y 1000 -defaultsOSRD
+preplace inst util_ds_buf_0 -pg 1 -lvl 5 -y 1740 -defaultsOSRD
+preplace netloc axi_vdma_0_M_AXI_MM2S 1 6 1 2090
+preplace netloc xlslice_2_Dout 1 12 1 3960
+preplace netloc xlslice_11_Dout 1 11 1 NJ
+preplace netloc dvi_decoder_v2_0_cv 1 4 8 NJ 570 NJ 570 NJ 570 NJ 570 NJ 570 NJ 570 NJ 570 3620
+preplace netloc proc_sys_reset_2_peripheral_reset 1 10 1 3380
+preplace netloc axi_pcie_0_axi_aclk_out 1 4 6 1200 990 NJ 910 2040 1260 2460 760 NJ 760 NJ
+preplace netloc dvi_decoder_v2_0_video_gb 1 4 9 NJ 420 NJ 420 NJ 420 NJ 420 NJ 420 NJ 420 NJ 420 NJ 420 4030
+preplace netloc mig_7series_0_ddr3_we_n 1 8 7 NJ 1530 NJ 1530 NJ 1530 NJ 1530 NJ 1530 NJ 1530 NJ
+preplace netloc axi_mem_intercon_M01_AXI 1 5 3 1600 550 NJ 550 2450
+preplace netloc c_shift_ram_0_Q 1 13 1 4380
+preplace netloc axi_gpio_0_gpio2_io_o 1 8 6 NJ 1100 3000 910 NJ 1120 NJ 1120 NJ 1120 NJ
+preplace netloc mig_7series_0_ddr3_odt 1 8 7 NJ 1670 NJ 1670 NJ 1670 NJ 1670 NJ 1670 NJ 1670 NJ
+preplace netloc dvi_decoder_v2_0_red_di 1 4 9 NJ 480 NJ 480 NJ 480 NJ 480 NJ 480 NJ 480 NJ 480 NJ 480 3990
+preplace netloc dvi_decoder_v2_0_data_gb 1 4 9 NJ 540 NJ 540 NJ 410 NJ 410 NJ 410 NJ 410 NJ 410 NJ 410 4000
+preplace netloc HPD_1 1 0 12 NJ 780 NJ 780 NJ 780 NJ 790 NJ 510 NJ 510 NJ 510 NJ 510 NJ 510 NJ 510 NJ 510 NJ
+preplace netloc HDMI_RX_CLK_P_1 1 0 1 NJ
+preplace netloc mig_7series_0_ddr3_reset_n 1 8 7 NJ 1550 NJ 1550 NJ 1550 NJ 1550 NJ 1550 NJ 1550 NJ
+preplace netloc LV_SCL_1 1 0 11 NJ 800 NJ 800 NJ 800 NJ 800 NJ 790 NJ 790 NJ 700 NJ 700 NJ 700 NJ 700 NJ
+preplace netloc PCI_CLK_N_1 1 0 5 NJ 1760 NJ 1760 NJ 1760 NJ 1760 NJ
+preplace netloc mig_7series_0_ddr3_ck_n 1 8 7 NJ 1590 NJ 1590 NJ 1590 NJ 1590 NJ 1590 NJ 1590 NJ
+preplace netloc mig_7series_0_ddr3_dm 1 8 7 NJ 1650 NJ 1650 NJ 1650 NJ 1650 NJ 1650 NJ 1650 NJ
+preplace netloc dvi_encoder_v2_0_TMDS_2_N 1 14 1 NJ
+preplace netloc dvi_decoder_v2_0_hdcp_ena 1 4 8 NJ 470 NJ 470 NJ 470 NJ 470 NJ 470 NJ 470 NJ 470 3650
+preplace netloc xlconstant_3_dout 1 11 1 NJ
+preplace netloc mig_7series_0_ddr3_ck_p 1 8 7 NJ 1570 NJ 1570 NJ 1570 NJ 1570 NJ 1570 NJ 1570 NJ
+preplace netloc axi_vdma_0_M_AXIS_MM2S 1 6 1 1970
+preplace netloc chroma_key_0_blue_blend 1 13 1 N
+preplace netloc xlslice_27_Dout 1 12 1 NJ
+preplace netloc dvi_encoder_v2_0_TMDS_2_P 1 14 1 NJ
+preplace netloc axi_pcie_0_M_AXI 1 6 1 2110
+preplace netloc chroma_key_0_vid_gb_pipe 1 13 1 N
+preplace netloc SYSCLK_LV_1 1 0 2 NJ 1010 NJ
+preplace netloc proc_sys_reset_3_peripheral_aresetn 1 7 1 2460
+preplace netloc dvi_encoder_v2_0_TMDS_1_N 1 14 1 NJ
+preplace netloc HDMI_RX_CLK_N_1 1 0 1 NJ
+preplace netloc rst_axi_pcie_0_125M_peripheral_reset 1 5 5 N 900 NJ 780 NJ 780 NJ 780 NJ
+preplace netloc proc_sys_reset_0_peripheral_reset 1 3 1 840
+preplace netloc mig_7series_0_ddr3_cas_n 1 8 7 NJ 1510 NJ 1510 NJ 1510 NJ 1510 NJ 1510 NJ 1510 NJ
+preplace netloc xlconcat_0_dout 1 8 5 NJ 1080 NJ 1040 NJ 1050 NJ 1130 4000
+preplace netloc xlslice_3_Dout 1 12 1 4010
+preplace netloc PCI_CLK_P_1 1 4 1 1200
+preplace netloc dvi_encoder_v2_0_TMDS_1_P 1 14 1 NJ
+preplace netloc chroma_key_0_dat_gb_pipe 1 13 1 N
+preplace netloc reg_expander_0_bank0 1 10 2 3380 820 NJ
+preplace netloc mig_7series_0_mmcm_locked 1 5 4 1600 1800 NJ 1800 NJ 1800 2760
+preplace netloc dvi_decoder_v2_0_sdout 1 4 9 NJ 360 NJ 450 NJ 450 NJ 450 NJ 450 NJ 450 NJ 450 NJ 450 3950
+preplace netloc dvi_decoder_v2_0_blue 1 4 9 NJ 410 NJ 410 NJ 400 NJ 400 NJ 400 NJ 400 NJ 400 NJ 400 3980
+preplace netloc xlslice_12_Dout 1 9 1 2950
+preplace netloc reg_expander_0_bank1 1 10 1 3340
+preplace netloc dvi_decoder_v2_0_de 1 4 9 NJ 180 1610 380 2080 380 NJ 380 NJ 380 NJ 380 NJ 380 3690 380 NJ
+preplace netloc util_ds_buf_0_IBUF_OUT 1 5 1 1560
+preplace netloc v_tc_0_hblank_out 1 6 1 NJ
+preplace netloc c_counter_binary_0_Q 1 13 1 NJ
+preplace netloc xlslice_5_Dout 1 10 1 NJ
+preplace netloc dvi_decoder_v2_0_red 1 4 9 NJ 380 NJ 440 NJ 440 NJ 440 NJ 440 NJ 440 NJ 440 NJ 440 3990
+preplace netloc dvi_encoder_v2_0_TMDS_CLK_N 1 14 1 NJ
+preplace netloc mig_7series_0_ui_clk_sync_rst 1 5 4 1610 1030 NJ 1220 NJ 1220 2750
+preplace netloc xlconstant_5_dout 1 6 1 NJ
+preplace netloc HDMI_RX_1_P_1 1 0 4 NJ 370 NJ 370 NJ 370 NJ
+preplace netloc rst_mig_7series_0_100M_peripheral_aresetn 1 6 2 2120 1600 NJ
+preplace netloc xlconstant_1_dout 1 8 1 2750
+preplace netloc util_ds_buf_10_BUFG_O 1 2 2 510 310 NJ
+preplace netloc dvi_encoder_v2_0_TMDS_CLK_P 1 14 1 NJ
+preplace netloc xlslice_7_Dout 1 14 1 NJ
+preplace netloc xlslice_4_Dout 1 12 1 NJ
+preplace netloc proc_sys_reset_1_interconnect_aresetn 1 5 2 NJ 760 2040
+preplace netloc xlslice_1_Dout 1 12 1 4060
+preplace netloc rst_axi_pcie_0_125M_peripheral_aresetn 1 5 3 N 940 2030 1200 NJ
+preplace netloc mig_7series_0_ddr3_addr 1 8 7 NJ 1450 NJ 1450 NJ 1450 NJ 1450 NJ 1450 NJ 1450 NJ
+preplace netloc chroma_key_0_red_di_pipe 1 13 1 4380
+preplace netloc dvi_decoder_v2_0_hsync 1 4 9 NJ 140 NJ 200 1960 40 NJ 350 NJ 350 NJ 350 NJ 350 3670 360 NJ
+preplace netloc dvi_decoder_v2_0_p_clk 1 4 10 1150 600 1530 770 2130 580 NJ 580 NJ 580 2950 580 NJ 580 3640 520 4040 120 4360
+preplace netloc HDMI_RX_0_N_1 1 0 4 NJ 350 NJ 350 NJ 350 NJ
+preplace netloc util_ds_buf_9_IBUF_OUT 1 1 1 NJ
+preplace netloc xlconstant_8_dout 1 5 1 1520
+preplace netloc PCI_RX_P_1 1 0 7 NJ 930 NJ 930 NJ 930 NJ 930 NJ 1020 NJ 930 1960
+preplace netloc chroma_key_0_hsync_pipe 1 13 1 N
+preplace netloc c_shift_ram_2_Q 1 13 1 4360
+preplace netloc dvi_decoder_v2_0_line_end 1 4 8 NJ 530 NJ 530 NJ 530 NJ 530 NJ 530 NJ 530 NJ 530 3660
+preplace netloc xlslice_0_Dout 1 14 1 NJ
+preplace netloc mig_7series_0_ddr3_cs_n 1 8 7 NJ 1630 NJ 1630 NJ 1630 NJ 1630 NJ 1630 NJ 1630 NJ
+preplace netloc dvi_decoder_v2_0_encoding 1 4 9 NJ 430 NJ 430 NJ 430 NJ 430 NJ 430 NJ 430 NJ 430 NJ 430 3980
+preplace netloc HDMI_RX_2_P_1 1 0 4 NJ 410 NJ 410 NJ 410 NJ
+preplace netloc mig_7series_0_ddr3_ba 1 8 7 NJ 1470 NJ 1470 NJ 1470 NJ 1470 NJ 1470 NJ 1470 NJ
+preplace netloc chroma_key_0_vsync_pipe 1 13 1 N
+preplace netloc xlslice_6_Dout 1 10 2 NJ 1280 NJ
+preplace netloc Net 1 8 7 NJ 1430 NJ 1430 NJ 1430 NJ 1430 NJ 1430 NJ 1430 NJ
+preplace netloc xlslice_8_Dout 1 12 1 4050
+preplace netloc Net1 1 8 7 NJ 1390 NJ 1390 NJ 1390 NJ 1390 NJ 1390 NJ 1390 NJ
+preplace netloc Net2 1 8 7 NJ 1410 NJ 1410 NJ 1410 NJ 1410 NJ 1410 NJ 1410 NJ
+preplace netloc PCI_RX_N_1 1 0 7 NJ 1090 NJ 1090 NJ 1090 NJ 1040 NJ 1040 NJ 960 1950
+preplace netloc chroma_key_0_blue_di_pipe 1 13 1 4360
+preplace netloc hdcp_snoop_0_An 1 11 1 3680
+preplace netloc dvi_decoder_v2_0_vsync 1 4 9 NJ 160 NJ 390 2090 390 NJ 370 NJ 370 NJ 370 NJ 370 3680 370 NJ
+preplace netloc Net3 1 0 10 NJ 570 NJ 570 520 610 NJ 810 1190 810 NJ 810 2020 1270 NJ 1270 NJ 1110 NJ
+preplace netloc Net4 1 7 5 NJ 170 NJ 170 NJ 170 NJ 170 3670
+preplace netloc LV_SDA_1 1 0 11 NJ 820 NJ 820 NJ 820 NJ 820 NJ 800 NJ 800 NJ 710 NJ 710 NJ 710 NJ 710 NJ
+preplace netloc axi_pcie_0_pci_exp_txn 1 6 9 NJ 1250 NJ 1250 NJ 1250 NJ 1240 NJ 1240 NJ 1240 NJ 1270 NJ 1270 NJ
+preplace netloc dvi_decoder_v2_0_px5_clk 1 4 10 1100 10 NJ 10 NJ 10 NJ 10 NJ 10 NJ 10 NJ 10 NJ 10 NJ 10 NJ
+preplace netloc axi_pcie_0_pci_exp_txp 1 6 9 NJ 1240 NJ 1230 NJ 1230 NJ 1230 NJ 1170 NJ 1170 NJ 1170 NJ 1170 NJ
+preplace netloc c_shift_ram_1_Q 1 13 1 4350
+preplace netloc xlslice_14_Dout 1 9 1 2970
+preplace netloc util_ds_buf_1_BUFG_O 1 2 1 NJ
+preplace netloc xlconstant_6_dout 1 6 1 NJ
+preplace netloc proc_sys_reset_1_peripheral_aresetn 1 5 2 1610 780 2060
+preplace netloc chroma_key_0_green_di_pipe 1 13 1 4370
+preplace netloc dvi_decoder_v2_0_green 1 4 9 NJ 400 NJ 400 NJ 30 NJ 30 NJ 30 NJ 30 NJ 30 NJ 30 4070
+preplace netloc hdcp_engine_0_cipher_stream 1 12 1 4020
+preplace netloc hdcp_snoop_0_Aksv14_write 1 11 1 3650
+preplace netloc hdcp_snoop_0_reg_dout 1 11 1 3630
+preplace netloc mig_7series_0_ui_clk 1 5 4 1600 990 2090 1190 NJ 1190 2760
+preplace netloc axi_mem_intercon_M02_AXI 1 7 1 N
+preplace netloc chroma_key_0_ctl_code_pipe 1 13 1 4350
+preplace netloc proc_sys_reset_1_peripheral_reset 1 5 7 NJ 750 NJ 680 NJ 680 NJ 680 NJ 680 NJ 680 3640
+preplace netloc HDMI_RX_0_P_1 1 0 4 NJ 330 NJ 330 NJ 330 NJ
+preplace netloc clk_wiz_0_clk_out1 1 3 5 NJ 980 NJ 1000 NJ 970 1990 1400 NJ
+preplace netloc dvi_encoder_v2_0_TMDS_0_N 1 14 1 NJ
+preplace netloc HDMI_RX_2_N_1 1 0 4 NJ 430 NJ 430 NJ 430 NJ
+preplace netloc clk_wiz_0_clk_out2 1 3 5 860 1000 NJ 1010 NJ 1000 NJ 1280 2470
+preplace netloc xlslice_13_Dout 1 9 1 2960
+preplace netloc clk_wiz_0_clk_out3 1 3 10 NJ 1020 NJ 1030 NJ 1020 NJ 1210 NJ 1210 NJ 1210 NJ 1220 NJ 1220 NJ 1220 NJ
+preplace netloc xlconstant_0_dout 1 5 1 NJ
+preplace netloc dvi_encoder_v2_0_TMDS_0_P 1 14 1 NJ
+preplace netloc axi_mem_intercon_M00_AXI 1 7 1 2480
+preplace netloc chroma_key_0_dat_ena_pipe 1 13 1 N
+preplace netloc chroma_key_0_de_pipe 1 13 1 N
+preplace netloc dvi_decoder_v2_0_ctl_code 1 4 9 NJ 520 NJ 520 NJ 520 NJ 520 NJ 520 NJ 520 NJ 520 3630 510 NJ
+preplace netloc clk_wiz_0_clk_out4 1 3 8 840 1050 NJ 1050 NJ 980 NJ 1230 NJ 1180 NJ 1180 3010 940 NJ
+preplace netloc axi_gpio_0_gpio_io_o 1 8 4 2770 1090 NJ 930 NJ 1040 3690
+preplace netloc dvi_decoder_v2_0_green_di 1 4 9 NJ 490 NJ 490 NJ 490 NJ 490 NJ 490 NJ 490 NJ 490 NJ 490 3980
+preplace netloc dvi_decoder_v2_0_blue_di 1 4 9 NJ 460 NJ 460 NJ 460 NJ 460 NJ 460 NJ 460 NJ 460 NJ 460 4000
+preplace netloc mig_7series_0_ddr3_ras_n 1 8 7 NJ 1490 NJ 1490 NJ 1490 NJ 1490 NJ 1490 NJ 1490 NJ
+preplace netloc chroma_key_0_green_blend 1 13 1 N
+preplace netloc dvi_decoder_v2_0_reset 1 4 10 1150 20 NJ 20 NJ 20 NJ 20 NJ 20 NJ 20 NJ 20 NJ 20 NJ 20 NJ
+preplace netloc HDMI_RX_1_N_1 1 0 4 NJ 390 NJ 390 NJ 390 NJ
+preplace netloc chroma_key_0_red_blend 1 13 1 N
+preplace netloc mig_7series_0_ddr3_cke 1 8 7 NJ 1610 NJ 1610 NJ 1610 NJ 1610 NJ 1610 NJ 1610 NJ
+preplace netloc xlconstant_7_dout 1 6 1 NJ
+preplace netloc rst_axi_pcie_0_125M_interconnect_aresetn 1 5 2 1550 920 NJ
+levelinfo -pg 1 0 150 400 680 980 1360 1780 2290 2620 2860 3170 3500 3820 4210 4510 4660 -top 0 -bot 1930
+",
+}
+
+  # Restore current instance
+  current_bd_instance $oldCurInst
+
+  save_bd_design
+}
+# End of create_root_design()
+
+
+##################################################################
+# MAIN FLOW
+##################################################################
+
+create_root_design ""
+
+
