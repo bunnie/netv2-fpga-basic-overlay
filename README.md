@@ -19,5 +19,24 @@ These are the blocks you will need:
 * hdcp_snoop
 * reg_expander
 
+# Compilation notes
+
+The design is implemented using Vivado's block diagram tool.
+
+The IP is checked in in a "generated" state, e.g. all the IP blocks
+have been generated from the block diagram. This is important because
+it resolves most dependencies that can trip up someone else trying
+to compile the IP.
+
+If you "clean" the IP state and regnerate from scratch, note that
+after you generate the IP and before you run synthesis, you have to
+edit the PCI express block to remove the slave interface, otherwise
+the design won't fit in the FPGA. The IP as checked-in has the slave
+interface edited out, so you can run a diff of the directory if you
+want to know what lines to delete to remove the slave interface.
 
 
+# License notes
+
+The GPLv3 license only applies to IP created by the author. Other IP
+is licensed as labelled.
