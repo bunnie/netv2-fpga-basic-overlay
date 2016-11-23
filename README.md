@@ -12,14 +12,18 @@ and add references to the Project Settings->IP->Repository Manager tab.
 These are the blocks you will need:
 
 * chroma-key   https://github.com/bunnie/netv2-fpga-chroma-key
-* dvi_decoder_v2
-* dvi_encoder_v2
-* edid_snoop
-* hdcp_engine
-* hdcp_snoop
-* reg_expander
+* dvi_decoder_v2 https://github.com/bunnie/netv2-fpga-dvi-decoder
+* dvi_encoder_v2 https://github.com/bunnie/netv2-fpga-dvi-encoder
+* edid_snoop   https://github.com/bunnie/netv2-fpga-edid-snoop
+* hdcp_engine  https://github.com/bunnie/netv2-fpga-hdcp-engine
+* hdcp_snoop   https://github.com/bunnie/netv2-fpga-hdcp-snoop
+* reg_expander https://github.com/bunnie/netv2-fpga-reg-expander
 
-# Compilation notes
+Once you've cloned these repositories, you need to go to
+Tools->Create and Package IP... and locally package the IP before you
+can use it in the top level block.
+
+# compilation notes
 
 The design is implemented using Vivado's block diagram tool.
 
