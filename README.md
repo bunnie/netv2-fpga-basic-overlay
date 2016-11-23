@@ -11,7 +11,7 @@ and add references to the Project Settings->IP->Repository Manager tab.
 
 These are the blocks you will need:
 
-* chroma-key
+* chroma-key   https://github.com/bunnie/netv2-fpga-chroma-key
 * dvi_decoder_v2
 * dvi_encoder_v2
 * edid_snoop
