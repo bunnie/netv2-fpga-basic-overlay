@@ -102,36 +102,47 @@ set_property DRIVE 16 [get_ports {BLINKENLIGHT[0]}]
 #set_property IOSTANDARD TMDS_33 [get_ports {HAX_TX2_P}]
 
 
-set_property IOSTANDARD TMDS_33 [get_ports HDMI_RX_0_N]
-set_property PACKAGE_PIN U4 [get_ports HDMI_RX_0_P]
-set_property PACKAGE_PIN V4 [get_ports HDMI_RX_0_N]
+# HDMI RX
 set_property IOSTANDARD TMDS_33 [get_ports HDMI_RX_0_P]
-set_property IOSTANDARD TMDS_33 [get_ports HDMI_RX_1_N]
-set_property PACKAGE_PIN P6 [get_ports HDMI_RX_1_P]
-set_property PACKAGE_PIN P5 [get_ports HDMI_RX_1_N]
+set_property PACKAGE_PIN U4 [get_ports HDMI_RX_0_P]
+set_property IOSTANDARD TMDS_33 [get_ports HDMI_RX_0_N]
+set_property PACKAGE_PIN V4 [get_ports HDMI_RX_0_N]
+
 set_property IOSTANDARD TMDS_33 [get_ports HDMI_RX_1_P]
-set_property IOSTANDARD TMDS_33 [get_ports HDMI_RX_2_N]
-set_property PACKAGE_PIN R7 [get_ports HDMI_RX_2_P]
-set_property PACKAGE_PIN T7 [get_ports HDMI_RX_2_N]
+set_property PACKAGE_PIN P6 [get_ports HDMI_RX_1_P]
+set_property IOSTANDARD TMDS_33 [get_ports HDMI_RX_1_N]
+set_property PACKAGE_PIN P5 [get_ports HDMI_RX_1_N]
+
 set_property IOSTANDARD TMDS_33 [get_ports HDMI_RX_2_P]
-set_property IOSTANDARD TMDS_33 [get_ports HDMI_RX_CLK_N]
-set_property PACKAGE_PIN P4 [get_ports HDMI_RX_CLK_P]
-set_property PACKAGE_PIN P3 [get_ports HDMI_RX_CLK_N]
+set_property PACKAGE_PIN R7 [get_ports HDMI_RX_2_P]
+set_property IOSTANDARD TMDS_33 [get_ports HDMI_RX_2_N]
+set_property PACKAGE_PIN T7 [get_ports HDMI_RX_2_N]
+
 set_property IOSTANDARD TMDS_33 [get_ports HDMI_RX_CLK_P]
-set_property IOSTANDARD TMDS_33 [get_ports {HDMI_TX_0_N[0]}]
-set_property PACKAGE_PIN T4 [get_ports {HDMI_TX_0_P[0]}]
-set_property PACKAGE_PIN T3 [get_ports {HDMI_TX_0_N[0]}]
+set_property PACKAGE_PIN P4 [get_ports HDMI_RX_CLK_P]
+set_property IOSTANDARD TMDS_33 [get_ports HDMI_RX_CLK_N]
+set_property PACKAGE_PIN P3 [get_ports HDMI_RX_CLK_N]
+
+# HDMI TX
 set_property IOSTANDARD TMDS_33 [get_ports {HDMI_TX_0_P[0]}]
-set_property IOSTANDARD TMDS_33 [get_ports {HDMI_TX_1_N[0]}]
-set_property PACKAGE_PIN U6 [get_ports {HDMI_TX_1_P[0]}]
-set_property PACKAGE_PIN U5 [get_ports {HDMI_TX_1_N[0]}]
+set_property PACKAGE_PIN T4 [get_ports {HDMI_TX_0_P[0]}]
+set_property IOSTANDARD TMDS_33 [get_ports {HDMI_TX_0_N[0]}]
+set_property PACKAGE_PIN T3 [get_ports {HDMI_TX_0_N[0]}]
+
 set_property IOSTANDARD TMDS_33 [get_ports {HDMI_TX_1_P[0]}]
-set_property PACKAGE_PIN U7 [get_ports {HDMI_TX_2_P[0]}]
+set_property PACKAGE_PIN U6 [get_ports {HDMI_TX_1_P[0]}]
+set_property IOSTANDARD TMDS_33 [get_ports {HDMI_TX_1_N[0]}]
+set_property PACKAGE_PIN U5 [get_ports {HDMI_TX_1_N[0]}]
+
 set_property IOSTANDARD TMDS_33 [get_ports {HDMI_TX_2_P[0]}]
-set_property IOSTANDARD TMDS_33 [get_ports {HDMI_TX_CLK_N[0]}]
-set_property PACKAGE_PIN R3 [get_ports {HDMI_TX_CLK_P[0]}]
-set_property PACKAGE_PIN T2 [get_ports {HDMI_TX_CLK_N[0]}]
+set_property PACKAGE_PIN U7 [get_ports {HDMI_TX_2_P[0]}]
+set_property IOSTANDARD TMDS_33 [get_ports {HDMI_TX_2_N[0]}]
+set_property PACKAGE_PIN V6 [get_ports {HDMI_TX_2_N[0]}]
+
 set_property IOSTANDARD TMDS_33 [get_ports {HDMI_TX_CLK_P[0]}]
+set_property PACKAGE_PIN R3 [get_ports {HDMI_TX_CLK_P[0]}]
+set_property IOSTANDARD TMDS_33 [get_ports {HDMI_TX_CLK_N[0]}]
+set_property PACKAGE_PIN T2 [get_ports {HDMI_TX_CLK_N[0]}]
 
 
 set_property PACKAGE_PIN V8 [get_ports {HPD_OVER[0]}]
@@ -144,10 +155,13 @@ set_property PACKAGE_PIN V3 [get_ports LV_SCL]
 set_property IOSTANDARD LVCMOS33 [get_ports LV_SCL]
 set_property PACKAGE_PIN V2 [get_ports LV_SDA]
 set_property IOSTANDARD LVCMOS33 [get_ports LV_SDA]
+
 #set_property PACKAGE_PIN M5 [get_ports {MCU_RX}]
 #set_property IOSTANDARD LVCMOS33 [get_ports {MCU_RX}]
 #set_property PACKAGE_PIN N6 [get_ports {MCU_TX}]
 #set_property IOSTANDARD LVCMOS33 [get_ports {MCU_TX}]
+
+
 #set_property PACKAGE_PIN A6 [get_ports {NetR10F_[1]}]
 #set_property IOSTANDARD LVCMOS33 [get_ports {NetR10F_[1]}]
 #set_property PACKAGE_PIN J18 [get_ports {NetR14F_[1]}]
